@@ -24,6 +24,7 @@ var handler map[int]func(*Session, []byte)
 func init() {
 	handler = make(map[int]func(*Session, []byte))
 
+	handler[int(Protocol_MOVE_JOG_REQ)] = HandleMoveJogReq
 }
 
 func NewSession(conn net.Conn) *Session {
@@ -43,11 +44,12 @@ func (session *Session) Start() {
 	for {
 		n, err := session.sock.Read(recv)
 		if err != nil {
-			fmt.Println(err)
+			session.CloseSession()
 			break
 		}
 
 		if n == 0 {
+			session.CloseSession()
 			fmt.Println("read size zero Id:" + strconv.FormatInt(int64(session.id), 10))
 			break
 		}
@@ -80,4 +82,17 @@ func (session *Session) GetId() uint64 {
 
 func (session *Session) Send(buf []byte) {
 	session.sock.Write(buf)
+}
+
+func (session *Session) CloseSession() {
+	fmt.Println("close session id : %d", session.id)
+
+	playGround := session.playGround
+
+	if playGround != nil {
+		UnregisterGlobal(session)
+	}
+
+	session.playGround = nil
+	session.sock.Close()
 }

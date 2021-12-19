@@ -1,14 +1,14 @@
 syntax = "proto3";
 package orc;
-option go_package = "./../orc";
+option go_package = "./../orc"g;
 
 enum Protocol {
     NONE_PROTOCOL = 0;
-    MOVE_JOG = 1;
-    ENTER_PLAYER = 2;
-    WELCOME_PLAYER = 3;
-    LEAVE_PLAYER = 4;
-    MOVE_PLAYER = 5;
+    MOVE_JOG_REQ = 1;
+    ENTER_PLAYER_NOTI = 2;
+    WELCOME_PLAYER_NOTI = 3;
+    LEAVE_PLAYER_NOTI = 4;
+    MOVE_PLAYER_NOTI = 5;
 }
 
 enum Direction {
@@ -46,9 +46,13 @@ message LeavePlayerNotiMessage {
 }
 
 message MovePlayerNotiMessage {
-    int64 id = 1;
-    float x = 2;
-    float y = 3;
+    message MovePlayer {
+        int64 id = 1;
+        float x = 2;
+        float y = 3;
+    }
+    
+    repeated MovePlayer players = 1;
 }
 
 

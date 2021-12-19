@@ -7,7 +7,9 @@ import (
 )
 
 type Config struct {
-	Tickcount int `json:"tickcount"`
+	Tickcount int     `json:"tickcount"`
+	Accel     float32 `json:"Accel"`
+	MaxSpeed  float32 `json:"MaxSpeed"`
 }
 
 var GlobalConfig Config

@@ -1,3 +1,5 @@
 {
-    "tickcount" : 30
+    "tickcount" : 30,
+    "accel" : 0.7,
+    "maxspeed" : 2.5
 }

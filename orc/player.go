@@ -8,12 +8,14 @@ import (
 )
 
 type Player struct {
-	session *Session
-	currDir Direction
-	x       float32
-	y       float32
-	speed   float32
-	accel   float32
+	session  *Session
+	currDir  Direction
+	jogDir   Direction
+	x        float32
+	y        float32
+	speed    float32
+	maxSpeed float32
+	accel    float32
 }
 
 func (player Player) ToPlayerMessage() *PlayerMessage {
@@ -28,6 +30,7 @@ func NewPlayer(s *Session) *Player {
 	return &Player{
 		session: s,
 		currDir: Direction_NONE_DIR,
+		jogDir:  Direction_NONE_DIR,
 	}
 }
 

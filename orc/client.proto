@@ -1,0 +1,54 @@
+syntax = "proto3";
+package orc;
+option go_package = "./../orc";
+
+enum Protocol {
+    NONE_PROTOCOL = 0;
+    MOVE_JOG = 1;
+    ENTER_PLAYER = 2;
+    WELCOME_PLAYER = 3;
+    LEAVE_PLAYER = 4;
+    MOVE_PLAYER = 5;
+}
+
+enum Direction {
+    NONE_DIR = 0;
+    NORTH = 1;
+    NORTH_EAST = 2;
+    EAST = 3;
+    EAST_SOUTH = 4;
+    SOUTH = 5;
+    SOUTH_WEST = 6;
+    WEST = 7;
+    WEST_NORTH = 8;
+}
+
+message PlayerMessage {
+    int64 id = 1;
+    float x = 2;
+    float y = 3;
+}
+
+message MoveJogReqMessage {
+    Direction dir = 1;
+}
+
+message EnterPlayerNotiMessage {
+    PlayerMessage player = 1;
+}
+
+message WelcomePlayerNotiMessage {
+    repeated PlayerMessage players = 1;
+}
+
+message LeavePlayerNotiMessage {
+    int64 id = 1;
+}
+
+message MovePlayerNotiMessage {
+    int64 id = 1;
+    float x = 2;
+    float y = 3;
+}
+
+

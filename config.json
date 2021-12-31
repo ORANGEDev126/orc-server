@@ -1,5 +1,5 @@
 {
-    "tickcount" : 30,
-    "accel" : 0.7,
-    "maxspeed" : 2.5
+    "tickcount" : 150,
+    "accel" : 0.025,
+    "maxspeed" : 0.6
 }

@@ -47,7 +47,7 @@ func (player *Player) SendMessage(id Protocol, msg proto.Message) {
 	buf := make([]byte, packetLen)
 
 	binary.LittleEndian.PutUint32(buf, uint32(packetLen))
-	binary.LittleEndian.PutUint32(buf, uint32(id))
+	binary.LittleEndian.PutUint32(buf[LENGTH_FIELD_LENGTH:], uint32(id))
 	msgBytes, err := proto.Marshal(msg)
 	if err != nil {
 		fmt.Println("marshal message error")

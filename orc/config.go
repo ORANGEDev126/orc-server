@@ -15,7 +15,7 @@ type Config struct {
 var GlobalConfig Config
 
 func init() {
-	b, err := ioutil.ReadFile("./config/config.json")
+	b, err := ioutil.ReadFile("./config.json")
 	if err != nil {
 		fmt.Println("cannot read json file ./config/config.json")
 		return

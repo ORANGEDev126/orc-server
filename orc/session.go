@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
-	"strconv"
 )
 
 type Session struct {
@@ -15,8 +14,9 @@ type Session struct {
 }
 
 const (
-	PROTOCOL_LENGTH = 4
-	HEADER_LENGTH   = 8
+	LENGTH_FIELD_LENGTH = 4
+	PROTOCOL_LENGTH     = 4
+	HEADER_LENGTH       = 8
 )
 
 var handler map[int]func(*Session, []byte)
@@ -35,22 +35,19 @@ func NewSession(conn net.Conn) *Session {
 }
 
 func (session *Session) Start() {
-	recv := make([]byte, 8192)
+	recv := make([]byte, 1024)
 	readLen := 0
 	defer func() {
-		session.sock.Close()
+		session.CloseSession()
 	}()
 
 	for {
 		n, err := session.sock.Read(recv)
 		if err != nil {
-			session.CloseSession()
 			break
 		}
 
 		if n == 0 {
-			session.CloseSession()
-			fmt.Println("read size zero Id:" + strconv.FormatInt(int64(session.id), 10))
 			break
 		}
 
@@ -65,11 +62,11 @@ func (session *Session) Start() {
 			protoId := binary.LittleEndian.Uint32(recv[PROTOCOL_LENGTH:])
 			handler, ok := handler[int(protoId)]
 			if !ok {
-				fmt.Println("invalid proto id %d", protoId)
+				fmt.Printf("invalid proto id %d\n", protoId)
 				break
 			}
 
-			handler(session, recv)
+			handler(session, recv[HEADER_LENGTH:packetLen])
 			copy(recv, recv[packetLen:])
 			readLen -= int(packetLen)
 		}
@@ -85,7 +82,7 @@ func (session *Session) Send(buf []byte) {
 }
 
 func (session *Session) CloseSession() {
-	fmt.Println("close session id : %d", session.id)
+	fmt.Println("close session")
 
 	playGround := session.playGround
 

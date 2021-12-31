@@ -24,7 +24,7 @@ type PlayGround struct {
 	moveJog    chan MoveJogChan
 }
 
-func init() {
+func StartGlobal() {
 	globalPlayGround = PlayGround{
 		players:    map[uint64]*Player{},
 		register:   make(chan *Player),
@@ -79,11 +79,15 @@ func (ground *PlayGround) render() {
 		}
 
 		player.currDir = calcDir(player)
+
+		fmt.Printf("current speed : %f, current dir : %v, current jog dir : %v\n", player.speed, player.currDir, player.jogDir)
+
 		movePlayer(player)
 		msg := &MovePlayerNotiMessage_MovePlayer{
-			Id: int64(id),
-			X:  player.x,
-			Y:  player.y,
+			Id:  int64(id),
+			X:   player.x,
+			Y:   player.y,
+			Dir: player.currDir,
 		}
 
 		moveNoti.Players = append(moveNoti.Players, msg)
@@ -117,20 +121,64 @@ func calcSpeed(player *Player) float32 {
 }
 
 func calcDir(player *Player) Direction {
-	diff := (int32(player.jogDir) + 8 - int32(player.currDir)) % 8
+	if player.jogDir == Direction_NONE_DIR {
+		return player.currDir
+	}
+
+	if player.currDir == Direction_NONE_DIR {
+		return player.jogDir
+	}
+
+	diff := getDiffDirection(player.currDir, player.jogDir)
 	if diff == 0 {
 		return player.currDir
 	} else if diff == 4 {
 		if rand.Int()%2 == 0 {
-			return Direction((int32(player.currDir) + 1) % 8)
+			return directionToClockwise(player.currDir)
 		} else {
-			return Direction((int32(player.currDir) + 7) % 8)
+			return directionToAntiClockwise(player.currDir)
 		}
 	} else if diff < 4 {
-		return Direction((int32(player.currDir) + 1) % 8)
+		return directionToClockwise(player.currDir)
 	} else {
-		return Direction((int32(player.currDir) + 7) % 8)
+		return directionToAntiClockwise(player.currDir)
 	}
+}
+
+func getDiffDirection(curr, jog Direction) int {
+	count := 0
+	for curr != jog {
+		curr = directionToClockwise(curr)
+		count++
+	}
+
+	return count
+}
+
+func directionToClockwise(dir Direction) Direction {
+	to := int(dir) + 1
+	if to == 9 {
+		return Direction_NORTH
+	}
+
+	return Direction(to)
+}
+
+func directionToAntiClockwise(dir Direction) Direction {
+	to := int(dir) - 1
+	if to == 0 {
+		return Direction_WEST_NORTH
+	}
+
+	return Direction(to)
+}
+
+func abs(v int) int {
+	if v < 0 {
+		return -v
+	}
+
+	return v
 }
 
 func movePlayer(player *Player) {
@@ -162,30 +210,28 @@ func movePlayer(player *Player) {
 func (ground *PlayGround) moveJogPlayer(moveJog MoveJogChan) {
 	player, ok := ground.players[moveJog.id]
 	if !ok {
-		fmt.Println("cannot find player on move jog request id : %d", moveJog.id)
+		fmt.Printf("cannot find player on move jog request id : %d\n", moveJog.id)
 		return
 	}
 
-	player.currDir = moveJog.dir
+	player.jogDir = moveJog.dir
 }
 
 func (ground *PlayGround) registerPlayer(enterPlayer *Player) {
+	enterMsg := &EnterPlayerNotiMessage{
+		Player: enterPlayer.ToPlayerMessage(),
+	}
+
+	ground.broadcast(Protocol_ENTER_PLAYER_NOTI, enterMsg)
+	ground.players[enterPlayer.GetId()] = enterPlayer
 	welcomeMsg := &WelcomePlayerNotiMessage{}
+	welcomeMsg.MyId = int64(enterPlayer.GetId())
 
 	for _, player := range ground.players {
 		welcomeMsg.Players = append(welcomeMsg.Players, player.ToPlayerMessage())
 	}
 
 	enterPlayer.SendMessage(Protocol_WELCOME_PLAYER_NOTI, welcomeMsg)
-
-	enterMsg := &EnterPlayerNotiMessage{
-		Player: enterPlayer.ToPlayerMessage(),
-	}
-
-	ground.broadcast(Protocol_ENTER_PLAYER_NOTI, enterMsg)
-
-	ground.players[enterPlayer.GetId()] = enterPlayer
-
 	fmt.Println("register to play ground")
 }
 

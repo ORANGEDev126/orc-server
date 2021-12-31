@@ -10,7 +10,7 @@ func HandleMoveJogReq(session *Session, buf []byte) {
 	msg := &MoveJogReqMessage{}
 	err := proto.Unmarshal(buf, msg)
 	if err != nil {
-		fmt.Println("unmarshal error on move jog req %v", err)
+		fmt.Printf("unmarshal error on move jog req %v\n", err)
 		return
 	}
 

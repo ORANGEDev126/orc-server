@@ -25,6 +25,7 @@ func (server *GameServer) Run() {
 		}
 
 		session := NewSession(sock)
+		go session.Start()
 		session.playGround = &globalPlayGround
 		RegisterGlobal(session)
 	}

@@ -8,7 +8,10 @@ enum Protocol {
     ENTER_PLAYER_NOTI = 2;
     WELCOME_PLAYER_NOTI = 3;
     LEAVE_PLAYER_NOTI = 4;
-    MOVE_PLAYER_NOTI = 5;
+    MOVE_OBJECT_NOTI = 5;
+    ENTER_PROJECTILE_NOTI = 6;
+    PROJECTILE_ATTACK_NOTI = 7;
+    SHOOT_PROJECTILE_REQ = 8;
 }
 
 enum Direction {
@@ -25,8 +28,16 @@ enum Direction {
 
 message PlayerMessage {
     int64 id = 1;
-    float x = 2;
-    float y = 3;
+    double x = 2;
+    double y = 3;
+    Direction dir = 4;
+}
+
+message ProjectileMessage {
+    int64 id = 1;
+    double x = 2;
+    double y = 3;
+    int32 angle = 4;
 }
 
 message MoveJogReqMessage {
@@ -35,6 +46,10 @@ message MoveJogReqMessage {
 
 message EnterPlayerNotiMessage {
     PlayerMessage player = 1;
+}
+
+message EnterProjectileNotiMessage {
+    ProjectileMessage projectile = 1;
 }
 
 message WelcomePlayerNotiMessage {
@@ -46,15 +61,24 @@ message LeavePlayerNotiMessage {
     int64 id = 1;
 }
 
-message MovePlayerNotiMessage {
-    message MovePlayer {
+message MoveObjectNotiMessage {
+    message Object {
         int64 id = 1;
-        float x = 2;
-        float y = 3;
+        double x = 2;
+        double y = 3;
         Direction dir = 4;
     }
     
-    repeated MovePlayer players = 1;
+    repeated Object objects = 1;
+}
+
+message ProjectileAttackNotiMessage {
+    int64 player_id = 1;
+    int64 projectile_id = 2;
+}
+
+message ShootProjectileReqMessage {
+    int32 angle = 1;
 }
 
 

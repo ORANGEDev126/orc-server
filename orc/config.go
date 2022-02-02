@@ -7,9 +7,12 @@ import (
 )
 
 type Config struct {
-	Tickcount int     `json:"tickcount"`
-	Accel     float32 `json:"Accel"`
-	MaxSpeed  float32 `json:"MaxSpeed"`
+	Tickcount        int     `json:"tickcount"`
+	Accel            float64 `json:"Accel"`
+	MaxSpeed         float64 `json:"MaxSpeed"`
+	PlayerRadius     float64 `json:"PlayerRadius"`
+	ProjectileRadius float64 `json:"ProjectileRadius"`
+	ProjectileSpeed  float64 `json:"ProjectileSpeed"`
 }
 
 var GlobalConfig Config

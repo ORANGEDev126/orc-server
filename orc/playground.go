@@ -2,8 +2,6 @@ package orc
 
 import (
 	"fmt"
-	"math"
-	"math/rand"
 	"time"
 
 	"google.golang.org/protobuf/proto"
@@ -16,21 +14,30 @@ type MoveJogChan struct {
 	dir Direction
 }
 
+type ShootProjectileChan struct {
+	playerId uint64
+	angle    int
+}
+
 type PlayGround struct {
-	players    map[uint64]*Player
-	register   chan *Player
-	unregister chan *Session
-	stop       chan bool
-	moveJog    chan MoveJogChan
+	players     map[uint64]*Player
+	projectiles []*Projectile
+	register    chan *Player
+	unregister  chan *Session
+	stop        chan bool
+	moveJog     chan MoveJogChan
+	shoot       chan ShootProjectileChan
 }
 
 func StartGlobal() {
 	globalPlayGround = PlayGround{
-		players:    map[uint64]*Player{},
-		register:   make(chan *Player),
-		unregister: make(chan *Session),
-		stop:       make(chan bool),
-		moveJog:    make(chan MoveJogChan),
+		players:     map[uint64]*Player{},
+		projectiles: []*Projectile{},
+		register:    make(chan *Player),
+		unregister:  make(chan *Session),
+		stop:        make(chan bool),
+		moveJog:     make(chan MoveJogChan),
+		shoot:       make(chan ShootProjectileChan),
 	}
 
 	go globalPlayGround.eventLoop()
@@ -65,146 +72,91 @@ func (ground *PlayGround) eventLoop() {
 			return
 		case moveJog := <-ground.moveJog:
 			ground.moveJogPlayer(moveJog)
+		case projectile := <-ground.shoot:
+			ground.shootProjectile(projectile.playerId, projectile.angle)
 		}
 	}
 }
 
 func (ground *PlayGround) render() {
-	moveNoti := &MovePlayerNotiMessage{}
+	moveNoti := &MoveObjectNotiMessage{}
+
+	for i := 0; i < len(ground.projectiles); {
+		nextPoint := ground.projectiles[i].NextPos()
+		projectileR := ground.projectiles[i].circle.radius
+		isCollision := false
+
+		for _, player := range ground.players {
+			if IsCollision(Circle{nextPoint, projectileR}, player.circle) {
+				player.ProjectileAttacked(ground.projectiles[i].angle)
+				ground.notifyProjectileAttack(ground.projectiles[i], player)
+				isCollision = true
+				break
+			}
+		}
+
+		if isCollision {
+			ground.projectiles = append(ground.projectiles[:i], ground.projectiles[i+1:]...)
+		} else {
+			ground.projectiles[i].Move(nextPoint)
+			moveNoti.Objects = append(moveNoti.Objects,
+				ground.projectiles[i].ToMoveObjectMessage())
+			i++
+		}
+	}
 
 	for id, player := range ground.players {
-		player.speed = calcSpeed(player)
-		if player.speed == 0 {
+		nextSpeed := player.NextSpeed()
+		if nextSpeed == 0 {
 			continue
 		}
 
-		player.currDir = calcDir(player)
+		nextDirection := player.NextDirection()
+		nextPoint := player.NextPoint(nextSpeed, nextDirection)
+		isCollision := false
 
+		for otherId, otherPlayer := range ground.players {
+			if id == otherId {
+				continue
+			}
+
+			if IsCollision(player.circle, otherPlayer.circle) {
+				isCollision = true
+				break
+			}
+		}
+
+		if isCollision {
+			continue
+		}
+
+		for i := 0; i < len(ground.projectiles); {
+			if IsCollision(Circle{nextPoint, player.circle.radius}, ground.projectiles[i].circle) {
+				player.ProjectileAttacked(ground.projectiles[i].angle)
+				ground.notifyProjectileAttack(ground.projectiles[i], player)
+				ground.projectiles = append(ground.projectiles[:i], ground.projectiles[i+1:]...)
+			} else {
+				i++
+			}
+		}
+
+		player.Move(nextSpeed, nextDirection, nextPoint)
 		fmt.Printf("current speed : %f, current dir : %v, current jog dir : %v\n", player.speed, player.currDir, player.jogDir)
-
-		movePlayer(player)
-		msg := &MovePlayerNotiMessage_MovePlayer{
-			Id:  int64(id),
-			X:   player.x,
-			Y:   player.y,
-			Dir: player.currDir,
-		}
-
-		moveNoti.Players = append(moveNoti.Players, msg)
+		moveNoti.Objects = append(moveNoti.Objects, player.ToMoveObjectMessage())
 	}
 
-	if len(moveNoti.Players) != 0 {
-		ground.broadcast(Protocol_MOVE_PLAYER_NOTI, moveNoti)
+	if len(moveNoti.Objects) != 0 {
+		ground.broadcast(Protocol_MOVE_OBJECT_NOTI, moveNoti)
 	}
 }
 
-func clamp(min, max, curr float32) float32 {
-	if curr < min {
-		return min
+func (ground *PlayGround) notifyProjectileAttack(projectile *Projectile, player *Player) {
+	msg := &ProjectileAttackNotiMessage{
+		PlayerId:     int64(player.GetId()),
+		ProjectileId: int64(projectile.id),
 	}
 
-	if curr > max {
-		return max
-	}
-
-	return curr
-}
-
-func calcSpeed(player *Player) float32 {
-	accel := player.accel
-	if player.jogDir == Direction_NONE_DIR {
-		accel = -accel
-	}
-
-	v := player.speed + accel
-	return clamp(0, player.maxSpeed, v)
-}
-
-func calcDir(player *Player) Direction {
-	if player.jogDir == Direction_NONE_DIR {
-		return player.currDir
-	}
-
-	if player.currDir == Direction_NONE_DIR {
-		return player.jogDir
-	}
-
-	diff := getDiffDirection(player.currDir, player.jogDir)
-	if diff == 0 {
-		return player.currDir
-	} else if diff == 4 {
-		if rand.Int()%2 == 0 {
-			return directionToClockwise(player.currDir)
-		} else {
-			return directionToAntiClockwise(player.currDir)
-		}
-	} else if diff < 4 {
-		return directionToClockwise(player.currDir)
-	} else {
-		return directionToAntiClockwise(player.currDir)
-	}
-}
-
-func getDiffDirection(curr, jog Direction) int {
-	count := 0
-	for curr != jog {
-		curr = directionToClockwise(curr)
-		count++
-	}
-
-	return count
-}
-
-func directionToClockwise(dir Direction) Direction {
-	to := int(dir) + 1
-	if to == 9 {
-		return Direction_NORTH
-	}
-
-	return Direction(to)
-}
-
-func directionToAntiClockwise(dir Direction) Direction {
-	to := int(dir) - 1
-	if to == 0 {
-		return Direction_WEST_NORTH
-	}
-
-	return Direction(to)
-}
-
-func abs(v int) int {
-	if v < 0 {
-		return -v
-	}
-
-	return v
-}
-
-func movePlayer(player *Player) {
-	diagonalVal := player.speed * math.Sqrt2 / float32(2)
-
-	if player.currDir == Direction_NORTH {
-		player.y += player.speed
-	} else if player.currDir == Direction_NORTH_EAST {
-		player.x += diagonalVal
-		player.y += diagonalVal
-	} else if player.currDir == Direction_EAST {
-		player.x += player.speed
-	} else if player.currDir == Direction_EAST_SOUTH {
-		player.x += diagonalVal
-		player.y -= diagonalVal
-	} else if player.currDir == Direction_SOUTH {
-		player.y -= player.speed
-	} else if player.currDir == Direction_SOUTH_WEST {
-		player.x -= diagonalVal
-		player.y -= diagonalVal
-	} else if player.currDir == Direction_WEST {
-		player.x -= player.speed
-	} else if player.currDir == Direction_WEST_NORTH {
-		player.x -= diagonalVal
-		player.y += diagonalVal
-	}
+	ground.broadcast(Protocol_PROJECTILE_ATTACK_NOTI, msg)
 }
 
 func (ground *PlayGround) moveJogPlayer(moveJog MoveJogChan) {
@@ -262,4 +214,36 @@ func (ground *PlayGround) broadcast(id Protocol, msg proto.Message) {
 	for _, player := range ground.players {
 		player.SendMessage(id, msg)
 	}
+}
+
+func (ground *PlayGround) shootProjectile(id uint64, angle int) {
+	if angle < 0 || angle > 360 {
+		fmt.Println("wrong angle when shoot projectile", angle)
+		return
+	}
+
+	player, ok := ground.players[id]
+	if !ok {
+		fmt.Println("cannot find player when shoot projectile id", id)
+		return
+	}
+
+	point := GetPosAngle(player.circle.point, player.circle.radius, angle)
+	projectile := NewProjectile(point, angle)
+
+	ground.projectiles = append(ground.projectiles, projectile)
+	ground.notifyProjectileEnter(projectile)
+}
+
+func (ground *PlayGround) notifyProjectileEnter(projectile *Projectile) {
+	msg := &EnterProjectileNotiMessage{
+		Projectile: &ProjectileMessage{
+			Id:    int64(projectile.id),
+			X:     projectile.circle.point.x,
+			Y:     projectile.circle.point.y,
+			Angle: int32(projectile.angle),
+		},
+	}
+
+	ground.broadcast(Protocol_ENTER_PROJECTILE_NOTI, msg)
 }

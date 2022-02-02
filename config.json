@@ -1,5 +1,9 @@
 {
-    "tickcount" : 150,
-    "accel" : 0.025,
-    "maxspeed" : 0.6
+    "FrameTickCount" : 100,
+    "PhysicsTickCount" : 100,
+    "Accel" : 0.03,
+    "MaxSpeed" : 0.4,
+    "PlayerRadius" : 0.5,
+    "ProjectileRadius" : 0.3,
+    "ProjectileSpeed" : 0.3
 }

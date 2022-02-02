@@ -30,7 +30,7 @@ func init() {
 func NewSession(conn net.Conn) *Session {
 	return &Session{
 		sock: conn,
-		id:   rand.Uint64(),
+		id:   uint64(rand.Int63()),
 	}
 }
 
@@ -78,6 +78,9 @@ func (session *Session) GetId() uint64 {
 }
 
 func (session *Session) Send(buf []byte) {
+	if session.sock == nil {
+		return
+	}
 	session.sock.Write(buf)
 }
 

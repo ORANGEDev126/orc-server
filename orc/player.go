@@ -29,10 +29,12 @@ func (player Player) ToPlayerMessage() *PlayerMessage {
 
 func NewPlayer(s *Session) *Player {
 	return &Player{
-		session: s,
-		currDir: Direction_NONE_DIR,
-		jogDir:  Direction_NONE_DIR,
-		circle:  Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
+		session:  s,
+		currDir:  Direction_NONE_DIR,
+		jogDir:   Direction_NONE_DIR,
+		circle:   Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
+		accel:    GlobalConfig.Accel,
+		maxSpeed: GlobalConfig.MaxSpeed,
 	}
 }
 
@@ -66,7 +68,8 @@ func (player *Player) NextSpeed() float64 {
 		accel = -accel
 	}
 
-	v := player.speed + accel
+	delta := accel * float64(GlobalConfig.FrameTickCount) / float64(GlobalConfig.PhysicsTickCount)
+	v := player.speed + delta
 	return Clamp(0, player.maxSpeed, v)
 }
 
@@ -96,28 +99,30 @@ func (player *Player) NextDirection() Direction {
 }
 
 func (player *Player) NextPoint(nextSpeed float64, nextDirection Direction) Point {
-	diagonalVal := nextSpeed * math.Sqrt2 / float64(2)
+	midSpeed := (player.speed + nextSpeed) / float64(2)
+	straightVal := midSpeed * float64(GlobalConfig.PhysicsTickCount) / float64(GlobalConfig.FrameTickCount)
+	diagonalVal := straightVal * math.Sqrt2 / float64(2)
 
 	if nextDirection == Direction_NORTH {
-		return Point{player.circle.point.x + nextSpeed,
-			player.circle.point.y}
+		return Point{player.circle.point.x,
+			player.circle.point.y + straightVal}
 	} else if nextDirection == Direction_NORTH_EAST {
 		return Point{player.circle.point.x + diagonalVal,
 			player.circle.point.y + diagonalVal}
 	} else if nextDirection == Direction_EAST {
-		return Point{player.circle.point.x + nextSpeed,
+		return Point{player.circle.point.x + straightVal,
 			player.circle.point.y}
 	} else if nextDirection == Direction_EAST_SOUTH {
 		return Point{player.circle.point.x + diagonalVal,
 			player.circle.point.y - diagonalVal}
 	} else if nextDirection == Direction_SOUTH {
 		return Point{player.circle.point.x,
-			player.circle.point.y - nextSpeed}
+			player.circle.point.y - straightVal}
 	} else if nextDirection == Direction_SOUTH_WEST {
 		return Point{player.circle.point.x - diagonalVal,
 			player.circle.point.y - diagonalVal}
 	} else if nextDirection == Direction_WEST {
-		return Point{player.circle.point.x - nextSpeed,
+		return Point{player.circle.point.x - straightVal,
 			player.circle.point.y}
 	} else if nextDirection == Direction_WEST_NORTH {
 		return Point{player.circle.point.x - diagonalVal,

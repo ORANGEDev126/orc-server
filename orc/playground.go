@@ -2,6 +2,7 @@ package orc
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"google.golang.org/protobuf/proto"
@@ -43,10 +44,26 @@ func StartGlobal() {
 	go globalPlayGround.eventLoop()
 }
 
+func TestSpawn() {
+	go func() {
+		time.Sleep(5 * time.Second)
+		player := NewPlayer(NewSession(nil))
+		globalPlayGround.register <- player
+		time.Sleep(1 * time.Second)
+		projectile := ShootProjectileChan{
+			playerId: player.GetId(),
+			angle:    rand.Intn(360),
+		}
+		globalPlayGround.shoot <- projectile
+	}()
+}
+
 func RegisterGlobal(session *Session) {
 	player := NewPlayer(session)
-	player.accel = GlobalConfig.Accel
-	player.maxSpeed = GlobalConfig.MaxSpeed
+
+	if len(globalPlayGround.players) == 0 {
+		TestSpawn()
+	}
 
 	globalPlayGround.register <- player
 }
@@ -56,7 +73,7 @@ func UnregisterGlobal(session *Session) {
 }
 
 func (ground *PlayGround) eventLoop() {
-	ticker := time.NewTicker(time.Millisecond * time.Duration(GlobalConfig.Tickcount))
+	ticker := time.NewTicker(time.Millisecond * time.Duration(GlobalConfig.FrameTickCount))
 	defer ticker.Stop()
 
 	for {
@@ -228,7 +245,7 @@ func (ground *PlayGround) shootProjectile(id uint64, angle int) {
 		return
 	}
 
-	point := GetPosAngle(player.circle.point, player.circle.radius, angle)
+	point := GetPosAngle(player.circle.point, player.circle.radius+0.1, angle)
 	projectile := NewProjectile(point, angle)
 
 	ground.projectiles = append(ground.projectiles, projectile)

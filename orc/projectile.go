@@ -11,7 +11,7 @@ type Projectile struct {
 
 func NewProjectile(point Point, angle int) *Projectile {
 	return &Projectile{
-		id:     rand.Uint64(),
+		id:     uint64(rand.Int63()),
 		circle: Circle{point, GlobalConfig.ProjectileRadius},
 		speed:  GlobalConfig.ProjectileSpeed,
 		angle:  angle,

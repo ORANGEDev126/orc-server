@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	Tickcount        int     `json:"tickcount"`
+	FrameTickCount   int     `json:"FrameTickCount"`
+	PhysicsTickCount int     `json:"PhysicsTickCount"`
 	Accel            float64 `json:"Accel"`
 	MaxSpeed         float64 `json:"MaxSpeed"`
 	PlayerRadius     float64 `json:"PlayerRadius"`

@@ -21,7 +21,7 @@ func GetPosAngle(point Point, dist float64, angle int) Point {
 func IsCollision(circle, otherCircle Circle) bool {
 	dis := math.Sqrt(math.Pow(circle.point.x-otherCircle.point.x, 2) +
 		math.Pow(circle.point.y-otherCircle.point.y, 2))
-	return dis <= circle.radius+otherCircle.radius
+	return dis < circle.radius+otherCircle.radius
 }
 
 func Clamp(min, max, curr float64) float64 {

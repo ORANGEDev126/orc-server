@@ -62,45 +62,53 @@ func (player *Player) ProjectileAttacked(projectileAngle int) {
 
 }
 
-func (player *Player) NextSpeed() float64 {
+func (player *Player) UpdateNextSpeed() float64 {
 	accel := player.accel
 	if player.jogDir == Direction_NONE_DIR {
 		accel = -accel
 	}
 
 	delta := accel * float64(GlobalConfig.FrameTickCount) / float64(GlobalConfig.PhysicsTickCount)
-	v := player.speed + delta
-	return Clamp(0, player.maxSpeed, v)
+	v := Clamp(0, player.maxSpeed, player.speed+delta)
+	player.speed = v
+
+	return v
 }
 
-func (player *Player) NextDirection() Direction {
+func (player *Player) UpdateNextDirection() Direction {
 	if player.jogDir == Direction_NONE_DIR {
 		return player.currDir
 	}
 
 	if player.currDir == Direction_NONE_DIR {
+		player.currDir = player.jogDir
 		return player.jogDir
 	}
 
 	diff := GetDiffDirection(player.currDir, player.jogDir)
+	dir := player.currDir
+
 	if diff == 0 {
 		return player.currDir
 	} else if diff == 4 {
 		if rand.Int()%2 == 0 {
-			return DirectionToClockwise(player.currDir)
+			dir = DirectionToClockwise(player.currDir)
 		} else {
-			return DirectionToAntiClockwise(player.currDir)
+			dir = DirectionToAntiClockwise(player.currDir)
 		}
 	} else if diff < 4 {
-		return DirectionToClockwise(player.currDir)
+		dir = DirectionToClockwise(player.currDir)
 	} else {
-		return DirectionToAntiClockwise(player.currDir)
+		dir = DirectionToAntiClockwise(player.currDir)
 	}
+
+	player.currDir = dir
+	return dir
 }
 
 func (player *Player) NextPoint(nextSpeed float64, nextDirection Direction) Point {
 	midSpeed := (player.speed + nextSpeed) / float64(2)
-	straightVal := midSpeed * float64(GlobalConfig.PhysicsTickCount) / float64(GlobalConfig.FrameTickCount)
+	straightVal := midSpeed * float64(GlobalConfig.FrameTickCount) / float64(GlobalConfig.PhysicsTickCount)
 	diagonalVal := straightVal * math.Sqrt2 / float64(2)
 
 	if nextDirection == Direction_NORTH {

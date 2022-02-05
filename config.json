@@ -3,7 +3,7 @@
     "PhysicsTickCount" : 100,
     "Accel" : 0.03,
     "MaxSpeed" : 0.4,
-    "PlayerRadius" : 0.5,
-    "ProjectileRadius" : 0.3,
+    "PlayerRadius" : 0.3,
+    "ProjectileRadius" : 0.2,
     "ProjectileSpeed" : 0.3
 }

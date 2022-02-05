@@ -50,11 +50,15 @@ func TestSpawn() {
 		player := NewPlayer(NewSession(nil))
 		globalPlayGround.register <- player
 		time.Sleep(1 * time.Second)
-		projectile := ShootProjectileChan{
-			playerId: player.GetId(),
-			angle:    rand.Intn(360),
+
+		for {
+			projectile := ShootProjectileChan{
+				playerId: player.GetId(),
+				angle:    rand.Intn(360),
+			}
+			globalPlayGround.shoot <- projectile
+			time.Sleep(300 * time.Millisecond)
 		}
-		globalPlayGround.shoot <- projectile
 	}()
 }
 
@@ -123,12 +127,12 @@ func (ground *PlayGround) render() {
 	}
 
 	for id, player := range ground.players {
-		nextSpeed := player.NextSpeed()
+		nextSpeed := player.UpdateNextSpeed()
 		if nextSpeed == 0 {
 			continue
 		}
 
-		nextDirection := player.NextDirection()
+		nextDirection := player.UpdateNextDirection()
 		nextPoint := player.NextPoint(nextSpeed, nextDirection)
 		isCollision := false
 
@@ -137,7 +141,9 @@ func (ground *PlayGround) render() {
 				continue
 			}
 
-			if IsCollision(player.circle, otherPlayer.circle) {
+			if !IsCollision(player.circle, otherPlayer.circle) &&
+				IsCollision(Circle{nextPoint, player.circle.radius}, otherPlayer.circle) {
+				fmt.Println("collision true players")
 				isCollision = true
 				break
 			}
@@ -244,6 +250,8 @@ func (ground *PlayGround) shootProjectile(id uint64, angle int) {
 		fmt.Println("cannot find player when shoot projectile id", id)
 		return
 	}
+
+	fmt.Println("shoot projectile")
 
 	point := GetPosAngle(player.circle.point, player.circle.radius+0.1, angle)
 	projectile := NewProjectile(point, angle)

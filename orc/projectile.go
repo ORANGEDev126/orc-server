@@ -18,6 +18,10 @@ func NewProjectile(point Point, angle int) *Projectile {
 	}
 }
 
+func (projectile *Projectile) Id() uint64 {
+	return projectile.id
+}
+
 func (projectile *Projectile) NextPos() Point {
 	return GetPosAngle(projectile.circle.point,
 		projectile.speed,

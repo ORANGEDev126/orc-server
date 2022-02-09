@@ -33,22 +33,22 @@ namespace Orc {
             "YXllck1lc3NhZ2UiSAoaRW50ZXJQcm9qZWN0aWxlTm90aU1lc3NhZ2USKgoK",
             "cHJvamVjdGlsZRgBIAEoCzIWLm9yYy5Qcm9qZWN0aWxlTWVzc2FnZSJOChhX",
             "ZWxjb21lUGxheWVyTm90aU1lc3NhZ2USDQoFbXlfaWQYASABKAMSIwoHcGxh",
-            "eWVycxgCIAMoCzISLm9yYy5QbGF5ZXJNZXNzYWdlIiQKFkxlYXZlUGxheWVy",
+            "eWVycxgCIAMoCzISLm9yYy5QbGF5ZXJNZXNzYWdlIiQKFkxlYXZlT2JqZWN0",
             "Tm90aU1lc3NhZ2USCgoCaWQYASABKAMilAEKFU1vdmVPYmplY3ROb3RpTWVz",
             "c2FnZRIyCgdvYmplY3RzGAEgAygLMiEub3JjLk1vdmVPYmplY3ROb3RpTWVz",
             "c2FnZS5PYmplY3QaRwoGT2JqZWN0EgoKAmlkGAEgASgDEgkKAXgYAiABKAES",
             "CQoBeRgDIAEoARIbCgNkaXIYBCABKA4yDi5vcmMuRGlyZWN0aW9uIkcKG1By",
             "b2plY3RpbGVBdHRhY2tOb3RpTWVzc2FnZRIRCglwbGF5ZXJfaWQYASABKAMS",
             "FQoNcHJvamVjdGlsZV9pZBgCIAEoAyIqChlTaG9vdFByb2plY3RpbGVSZXFN",
-            "ZXNzYWdlEg0KBWFuZ2xlGAEgASgFKt0BCghQcm90b2NvbBIRCg1OT05FX1BS",
+            "ZXNzYWdlEg0KBWFuZ2xlGAEgASgFKtwBCghQcm90b2NvbBIRCg1OT05FX1BS",
             "T1RPQ09MEAASEAoMTU9WRV9KT0dfUkVREAESFQoRRU5URVJfUExBWUVSX05P",
-            "VEkQAhIXChNXRUxDT01FX1BMQVlFUl9OT1RJEAMSFQoRTEVBVkVfUExBWUVS",
-            "X05PVEkQBBIUChBNT1ZFX09CSkVDVF9OT1RJEAUSGQoVRU5URVJfUFJPSkVD",
-            "VElMRV9OT1RJEAYSGgoWUFJPSkVDVElMRV9BVFRBQ0tfTk9USRAHEhgKFFNI",
-            "T09UX1BST0pFQ1RJTEVfUkVREAgqgwEKCURpcmVjdGlvbhIMCghOT05FX0RJ",
-            "UhAAEgkKBU5PUlRIEAESDgoKTk9SVEhfRUFTVBACEggKBEVBU1QQAxIOCgpF",
-            "QVNUX1NPVVRIEAQSCQoFU09VVEgQBRIOCgpTT1VUSF9XRVNUEAYSCAoEV0VT",
-            "VBAHEg4KCldFU1RfTk9SVEgQCEIKWgguLy4uL29yY2IGcHJvdG8z"));
+            "VEkQAhIXChNXRUxDT01FX1BMQVlFUl9OT1RJEAMSFAoQTEVBVkVfT0JKRUNf",
+            "Tk9USRAEEhQKEE1PVkVfT0JKRUNUX05PVEkQBRIZChVFTlRFUl9QUk9KRUNU",
+            "SUxFX05PVEkQBhIaChZQUk9KRUNUSUxFX0FUVEFDS19OT1RJEAcSGAoUU0hP",
+            "T1RfUFJPSkVDVElMRV9SRVEQCCqDAQoJRGlyZWN0aW9uEgwKCE5PTkVfRElS",
+            "EAASCQoFTk9SVEgQARIOCgpOT1JUSF9FQVNUEAISCAoERUFTVBADEg4KCkVB",
+            "U1RfU09VVEgQBBIJCgVTT1VUSBAFEg4KClNPVVRIX1dFU1QQBhIICgRXRVNU",
+            "EAcSDgoKV0VTVF9OT1JUSBAIQgpaCC4vLi4vb3JjYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Orc.Protocol), typeof(global::Orc.Direction), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,7 +58,7 @@ namespace Orc {
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.EnterPlayerNotiMessage), global::Orc.EnterPlayerNotiMessage.Parser, new[]{ "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.EnterProjectileNotiMessage), global::Orc.EnterProjectileNotiMessage.Parser, new[]{ "Projectile" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.WelcomePlayerNotiMessage), global::Orc.WelcomePlayerNotiMessage.Parser, new[]{ "MyId", "Players" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.LeavePlayerNotiMessage), global::Orc.LeavePlayerNotiMessage.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.LeaveObjectNotiMessage), global::Orc.LeaveObjectNotiMessage.Parser, new[]{ "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.MoveObjectNotiMessage), global::Orc.MoveObjectNotiMessage.Parser, new[]{ "Objects" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Orc.MoveObjectNotiMessage.Types.Object), global::Orc.MoveObjectNotiMessage.Types.Object.Parser, new[]{ "Id", "X", "Y", "Dir" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.ProjectileAttackNotiMessage), global::Orc.ProjectileAttackNotiMessage.Parser, new[]{ "PlayerId", "ProjectileId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.ShootProjectileReqMessage), global::Orc.ShootProjectileReqMessage.Parser, new[]{ "Angle" }, null, null, null, null)
@@ -73,7 +73,7 @@ namespace Orc {
     [pbr::OriginalName("MOVE_JOG_REQ")] MoveJogReq = 1,
     [pbr::OriginalName("ENTER_PLAYER_NOTI")] EnterPlayerNoti = 2,
     [pbr::OriginalName("WELCOME_PLAYER_NOTI")] WelcomePlayerNoti = 3,
-    [pbr::OriginalName("LEAVE_PLAYER_NOTI")] LeavePlayerNoti = 4,
+    [pbr::OriginalName("LEAVE_OBJEC_NOTI")] LeaveObjecNoti = 4,
     [pbr::OriginalName("MOVE_OBJECT_NOTI")] MoveObjectNoti = 5,
     [pbr::OriginalName("ENTER_PROJECTILE_NOTI")] EnterProjectileNoti = 6,
     [pbr::OriginalName("PROJECTILE_ATTACK_NOTI")] ProjectileAttackNoti = 7,
@@ -1495,16 +1495,16 @@ namespace Orc {
 
   }
 
-  public sealed partial class LeavePlayerNotiMessage : pb::IMessage<LeavePlayerNotiMessage>
+  public sealed partial class LeaveObjectNotiMessage : pb::IMessage<LeaveObjectNotiMessage>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<LeavePlayerNotiMessage> _parser = new pb::MessageParser<LeavePlayerNotiMessage>(() => new LeavePlayerNotiMessage());
+    private static readonly pb::MessageParser<LeaveObjectNotiMessage> _parser = new pb::MessageParser<LeaveObjectNotiMessage>(() => new LeaveObjectNotiMessage());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<LeavePlayerNotiMessage> Parser { get { return _parser; } }
+    public static pb::MessageParser<LeaveObjectNotiMessage> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1520,7 +1520,7 @@ namespace Orc {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public LeavePlayerNotiMessage() {
+    public LeaveObjectNotiMessage() {
       OnConstruction();
     }
 
@@ -1528,15 +1528,15 @@ namespace Orc {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public LeavePlayerNotiMessage(LeavePlayerNotiMessage other) : this() {
+    public LeaveObjectNotiMessage(LeaveObjectNotiMessage other) : this() {
       id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public LeavePlayerNotiMessage Clone() {
-      return new LeavePlayerNotiMessage(this);
+    public LeaveObjectNotiMessage Clone() {
+      return new LeaveObjectNotiMessage(this);
     }
 
     /// <summary>Field number for the "id" field.</summary>
@@ -1554,12 +1554,12 @@ namespace Orc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as LeavePlayerNotiMessage);
+      return Equals(other as LeaveObjectNotiMessage);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(LeavePlayerNotiMessage other) {
+    public bool Equals(LeaveObjectNotiMessage other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1632,7 +1632,7 @@ namespace Orc {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(LeavePlayerNotiMessage other) {
+    public void MergeFrom(LeaveObjectNotiMessage other) {
       if (other == null) {
         return;
       }

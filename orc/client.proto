@@ -7,7 +7,7 @@ enum Protocol {
     MOVE_JOG_REQ = 1;
     ENTER_PLAYER_NOTI = 2;
     WELCOME_PLAYER_NOTI = 3;
-    LEAVE_PLAYER_NOTI = 4;
+    LEAVE_OBJEC_NOTI = 4;
     MOVE_OBJECT_NOTI = 5;
     ENTER_PROJECTILE_NOTI = 6;
     PROJECTILE_ATTACK_NOTI = 7;
@@ -57,7 +57,7 @@ message WelcomePlayerNotiMessage {
     repeated PlayerMessage players = 2;
 }
 
-message LeavePlayerNotiMessage {
+message LeaveObjectNotiMessage {
     int64 id = 1;
 }
 

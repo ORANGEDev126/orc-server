@@ -120,9 +120,14 @@ func (ground *PlayGround) render() {
 			ground.projectiles = append(ground.projectiles[:i], ground.projectiles[i+1:]...)
 		} else {
 			ground.projectiles[i].Move(nextPoint)
-			moveNoti.Objects = append(moveNoti.Objects,
-				ground.projectiles[i].ToMoveObjectMessage())
-			i++
+			if nextPoint.x > 50 || nextPoint.y > 50 || nextPoint.x < -50 || nextPoint.y < -50 {
+				ground.notifyRemoveObject(ground.projectiles[i].Id())
+				ground.projectiles = append(ground.projectiles[:i], ground.projectiles[i+1:]...)
+			} else {
+				moveNoti.Objects = append(moveNoti.Objects,
+					ground.projectiles[i].ToMoveObjectMessage())
+				i++
+			}
 		}
 	}
 
@@ -225,12 +230,14 @@ func (ground *PlayGround) unregisterPlayer(session *Session) {
 	if leavePlayer == nil {
 		return
 	}
+	ground.notifyRemoveObject(leavePlayer.GetId())
+}
 
-	leaveMsg := &LeavePlayerNotiMessage{
-		Id: int64(leavePlayer.GetId()),
+func (ground *PlayGround) notifyRemoveObject(id uint64) {
+	leaveMsg := &LeaveObjectNotiMessage{
+		Id: int64(id),
 	}
-
-	ground.broadcast(Protocol_LEAVE_PLAYER_NOTI, leaveMsg)
+	ground.broadcast(Protocol_LEAVE_OBJEC_NOTI, leaveMsg)
 }
 
 func (ground *PlayGround) broadcast(id Protocol, msg proto.Message) {

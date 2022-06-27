@@ -25,6 +25,7 @@ func init() {
 	handler = make(map[int]func(*Session, []byte))
 
 	handler[int(Protocol_MOVE_JOG_REQ)] = HandleMoveJogReq
+	handler[int(Protocol_SHOOT_PROJECTILE_REQ)] = HandleShootProjectileReq
 }
 
 func NewSession(conn net.Conn) *Session {

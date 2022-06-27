@@ -20,6 +20,10 @@ type ShootProjectileChan struct {
 	angle    int
 }
 
+type AttackChan struct {
+	playerId uint64
+}
+
 type PlayGround struct {
 	players     map[uint64]*Player
 	projectiles []*Projectile
@@ -28,6 +32,7 @@ type PlayGround struct {
 	stop        chan bool
 	moveJog     chan MoveJogChan
 	shoot       chan ShootProjectileChan
+	attackChan  chan AttackChan
 }
 
 func StartGlobal() {
@@ -39,6 +44,7 @@ func StartGlobal() {
 		stop:        make(chan bool),
 		moveJog:     make(chan MoveJogChan),
 		shoot:       make(chan ShootProjectileChan),
+		attackChan:  make(chan AttackChan),
 	}
 
 	go globalPlayGround.eventLoop()
@@ -95,6 +101,8 @@ func (ground *PlayGround) eventLoop() {
 			ground.moveJogPlayer(moveJog)
 		case projectile := <-ground.shoot:
 			ground.shootProjectile(projectile.playerId, projectile.angle)
+		case attack := <-ground.attackChan:
+			ground.attack(attack.playerId)
 		}
 	}
 }
@@ -265,6 +273,10 @@ func (ground *PlayGround) shootProjectile(id uint64, angle int) {
 
 	ground.projectiles = append(ground.projectiles, projectile)
 	ground.notifyProjectileEnter(projectile)
+}
+
+func (ground *PlayGround) attack(id uint64) {
+
 }
 
 func (ground *PlayGround) notifyProjectileEnter(projectile *Projectile) {

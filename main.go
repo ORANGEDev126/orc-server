@@ -13,7 +13,7 @@ func main() {
 	orc.StartGlobal()
 
 	server := orc.GameServer{
-		Port: 1004,
+		Port: 8000,
 	}
 	go server.Run()
 

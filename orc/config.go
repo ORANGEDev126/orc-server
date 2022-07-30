@@ -21,7 +21,7 @@ var GlobalConfig Config
 func init() {
 	b, err := ioutil.ReadFile("./config.json")
 	if err != nil {
-		fmt.Println("cannot read json file ./config/config.json")
+		fmt.Println("cannot read json file ./config.json")
 		return
 	}
 	err = json.Unmarshal(b, &GlobalConfig)

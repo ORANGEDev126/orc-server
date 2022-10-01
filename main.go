@@ -13,9 +13,10 @@ func main() {
 	orc.StartGlobal()
 
 	server := orc.GameServer{
-		Port: 8000,
+		Port: orc.GlobalConfig.ServerPort,
 	}
 	go server.Run()
+	fmt.Println("listen on port : ", orc.GlobalConfig.ServerPort)
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 	http.ListenAndServe(":8282", nil)

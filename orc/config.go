@@ -7,13 +7,15 @@ import (
 )
 
 type Config struct {
-	FrameTickCount   int     `json:"FrameTickCount"`
-	PhysicsTickCount int     `json:"PhysicsTickCount"`
-	Accel            float64 `json:"Accel"`
-	MaxSpeed         float64 `json:"MaxSpeed"`
-	PlayerRadius     float64 `json:"PlayerRadius"`
-	ProjectileRadius float64 `json:"ProjectileRadius"`
-	ProjectileSpeed  float64 `json:"ProjectileSpeed"`
+	FrameTickCount    int     `json:"FrameTickCount"`
+	PhysicsTickCount  int     `json:"PhysicsTickCount"`
+	Accel             float64 `json:"Accel"`
+	MaxSpeed          float64 `json:"MaxSpeed"`
+	PlayerRadius      float64 `json:"PlayerRadius"`
+	ProjectileRadius  float64 `json:"ProjectileRadius"`
+	ProjectileSpeed   float64 `json:"ProjectileSpeed"`
+	ServerPort        int     `json:"ServerPort"`
+	PlayerAttackRange int     `json:"PlayerAttackRange"`
 }
 
 var GlobalConfig Config

@@ -5,5 +5,7 @@
     "MaxSpeed" : 0.4,
     "PlayerRadius" : 0.3,
     "ProjectileRadius" : 0.2,
-    "ProjectileSpeed" : 0.3
+    "ProjectileSpeed" : 0.3,
+    "ServerPort" : 8000,
+    "PlayerAttackRange": 60
 }

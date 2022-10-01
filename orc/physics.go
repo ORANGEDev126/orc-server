@@ -19,9 +19,100 @@ func GetPosAngle(point Point, dist float64, angle int) Point {
 }
 
 func IsCollision(circle, otherCircle Circle) bool {
-	dis := math.Sqrt(math.Pow(circle.point.x-otherCircle.point.x, 2) +
-		math.Pow(circle.point.y-otherCircle.point.y, 2))
-	return dis < circle.radius+otherCircle.radius
+	return Distance(circle.point, otherCircle.point) < circle.radius+otherCircle.radius
+}
+
+func IsAttackSuccess(attacker Point, opponent Circle, attackRange int, attackerDir Direction) bool {
+	return Distance(attacker, opponent.point) < float64(attackRange)+opponent.radius &&
+		IsInRange(opponent.point, attackerDir, attackRange)
+}
+
+func GetPointFromDir(dir Direction) Point {
+	switch dir {
+	case Direction_NORTH:
+		return Point{0, 1}
+	case Direction_NORTH_EAST:
+		return Point{math.Sqrt(2) / 2, math.Sqrt(2) / 2}
+	case Direction_EAST:
+		return Point{1, 0}
+	case Direction_EAST_SOUTH:
+		return Point{math.Sqrt(2) / 2, -math.Sqrt(2) / 2}
+	case Direction_SOUTH:
+		return Point{0, -1}
+	case Direction_SOUTH_WEST:
+		return Point{-math.Sqrt(2) / 2, -math.Sqrt(2) / 2}
+	case Direction_WEST:
+		return Point{-1, 0}
+	case Direction_WEST_NORTH:
+		return Point{-math.Sqrt(2) / 2, math.Sqrt(2) / 2}
+	default:
+		return Point{0, 0}
+	}
+}
+
+func GetAngleFromDir(dir Direction) int {
+	switch dir {
+	case Direction_NORTH:
+		return 90
+	case Direction_NORTH_EAST:
+		return 45
+	case Direction_EAST:
+		return 0
+	case Direction_EAST_SOUTH:
+		return 315
+	case Direction_SOUTH:
+		return 270
+	case Direction_SOUTH_WEST:
+		return 225
+	case Direction_WEST:
+		return 180
+	case Direction_WEST_NORTH:
+		return 135
+	default:
+		return 0
+	}
+}
+
+func GetAngleFromPoint(point Point) int {
+	t := math.Atan(point.y / point.x)
+	return int(t * 180 / 3.141592)
+}
+
+func GetAngleRangeFromDir(dir Direction, inputRange int) (int, int) {
+	r := GetAngleFromDir(dir)
+	a := r - inputRange
+	if a < 0 {
+		a += 360
+	}
+
+	b := r + inputRange
+	if b < a {
+		b += 360
+	}
+
+	return a, b
+}
+
+func IsInRange(opponentPoint Point, attackerDir Direction, attackRange int) bool {
+	a, b := GetAngleRangeFromDir(attackerDir, attackRange)
+	c := GetAngleFromPoint(opponentPoint)
+
+	if a < c && c < b {
+		return true
+	}
+
+	c += 360
+
+	if a < c && c < b {
+		return true
+	}
+
+	return false
+}
+
+func Distance(a, b Point) float64 {
+	return math.Sqrt(math.Pow(a.x-b.x, 2) +
+		math.Pow(a.y-b.y, 2))
 }
 
 func Clamp(min, max, curr float64) float64 {

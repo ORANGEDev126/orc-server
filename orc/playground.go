@@ -182,7 +182,7 @@ func (ground *PlayGround) render() {
 	}
 
 	if len(moveNoti.Objects) != 0 {
-		ground.broadcast(Protocol_MOVE_OBJECT_NOTI, moveNoti)
+		ground.broadcast(Notification_MOVE_OBJECT_NOTI, moveNoti)
 	}
 }
 
@@ -192,7 +192,7 @@ func (ground *PlayGround) notifyProjectileAttack(projectile *Projectile, player 
 		ProjectileId: int64(projectile.id),
 	}
 
-	ground.broadcast(Protocol_PROJECTILE_ATTACK_NOTI, msg)
+	ground.broadcast(Notification_PROJECTILE_ATTACK_NOTI, msg)
 }
 
 func (ground *PlayGround) moveJogPlayer(moveJog MoveJogChan) {
@@ -210,7 +210,7 @@ func (ground *PlayGround) registerPlayer(enterPlayer *Player) {
 		Player: enterPlayer.ToPlayerMessage(),
 	}
 
-	ground.broadcast(Protocol_ENTER_PLAYER_NOTI, enterMsg)
+	ground.broadcast(Notification_ENTER_PLAYER_NOTI, enterMsg)
 	ground.players[enterPlayer.GetId()] = enterPlayer
 	welcomeMsg := &WelcomePlayerNotiMessage{}
 	welcomeMsg.MyId = int64(enterPlayer.GetId())
@@ -219,7 +219,7 @@ func (ground *PlayGround) registerPlayer(enterPlayer *Player) {
 		welcomeMsg.Players = append(welcomeMsg.Players, player.ToPlayerMessage())
 	}
 
-	enterPlayer.SendMessage(Protocol_WELCOME_PLAYER_NOTI, welcomeMsg)
+	enterPlayer.SendMessage(Notification_WELCOME_PLAYER_NOTI, welcomeMsg)
 	fmt.Println("register to play ground")
 }
 
@@ -245,10 +245,10 @@ func (ground *PlayGround) notifyRemoveObject(id uint64) {
 	leaveMsg := &LeaveObjectNotiMessage{
 		Id: int64(id),
 	}
-	ground.broadcast(Protocol_LEAVE_OBJEC_NOTI, leaveMsg)
+	ground.broadcast(Notification_LEAVE_OBJECT_NOTI, leaveMsg)
 }
 
-func (ground *PlayGround) broadcast(id Protocol, msg proto.Message) {
+func (ground *PlayGround) broadcast(id Notification, msg proto.Message) {
 	for _, player := range ground.players {
 		player.SendMessage(id, msg)
 	}
@@ -265,8 +265,6 @@ func (ground *PlayGround) shootProjectile(id uint64, angle int) {
 		fmt.Println("cannot find player when shoot projectile id", id)
 		return
 	}
-
-	fmt.Println("shoot projectile")
 
 	point := GetPosAngle(player.circle.point, player.circle.radius+0.1, angle)
 	projectile := NewProjectile(point, angle)
@@ -289,5 +287,5 @@ func (ground *PlayGround) notifyProjectileEnter(projectile *Projectile) {
 		},
 	}
 
-	ground.broadcast(Protocol_ENTER_PROJECTILE_NOTI, msg)
+	ground.broadcast(Notification_ENTER_PROJECTILE_NOTI, msg)
 }

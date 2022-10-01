@@ -10,13 +10,14 @@ import (
 )
 
 type Player struct {
-	session  *Session
-	currDir  Direction
-	jogDir   Direction
-	circle   Circle
-	speed    float64
-	maxSpeed float64
-	accel    float64
+	session     *Session
+	currDir     Direction
+	jogDir      Direction
+	circle      Circle
+	speed       float64
+	maxSpeed    float64
+	accel       float64
+	attackRange int
 }
 
 func (player Player) ToPlayerMessage() *PlayerMessage {
@@ -29,12 +30,13 @@ func (player Player) ToPlayerMessage() *PlayerMessage {
 
 func NewPlayer(s *Session) *Player {
 	return &Player{
-		session:  s,
-		currDir:  Direction_NONE_DIR,
-		jogDir:   Direction_NONE_DIR,
-		circle:   Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
-		accel:    GlobalConfig.Accel,
-		maxSpeed: GlobalConfig.MaxSpeed,
+		session:     s,
+		currDir:     Direction_NONE_DIR,
+		jogDir:      Direction_NONE_DIR,
+		circle:      Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
+		accel:       GlobalConfig.Accel,
+		maxSpeed:    GlobalConfig.MaxSpeed,
+		attackRange: GlobalConfig.PlayerAttackRange,
 	}
 }
 
@@ -42,7 +44,7 @@ func (player *Player) GetId() uint64 {
 	return player.session.id
 }
 
-func (player *Player) SendMessage(id Protocol, msg proto.Message) {
+func (player *Player) SendMessage(id Notification, msg proto.Message) {
 	packetLen := HEADER_LENGTH + proto.Size(msg)
 	buf := make([]byte, packetLen)
 

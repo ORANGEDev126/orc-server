@@ -12,6 +12,27 @@ type Point struct {
 	y float64
 }
 
+func (p *Point) Minus(other Point) Point {
+	return Point{p.x - other.x, p.y - other.y}
+}
+
+func VectorToAngle(point Point) int {
+	result := RadianToAngle(math.Atan(point.y / point.x))
+	if result < 0 {
+		return result + 360
+	}
+
+	return result
+}
+
+func AngleToRadian(angle int) float64 {
+	return float64(angle) * 3.141592 / 180
+}
+
+func RadianToAngle(radian float64) int {
+	return int(radian * 180 / 3.141592)
+}
+
 func GetPosAngle(point Point, dist float64, angle int) Point {
 	radian := float64(angle) * 3.141592 / 180
 	return Point{point.x + dist*math.Cos(radian),
@@ -22,8 +43,8 @@ func IsCollision(circle, otherCircle Circle) bool {
 	return Distance(circle.point, otherCircle.point) < circle.radius+otherCircle.radius
 }
 
-func IsAttackSuccess(attacker Point, opponent Circle, attackRange int, attackerDir Direction) bool {
-	return Distance(attacker, opponent.point) < float64(attackRange)+opponent.radius &&
+func IsAttackSuccess(attacker Point, opponent Circle, attackDistance float64, attackerDir Direction, attackRange int) bool {
+	return Distance(attacker, opponent.point) < attackDistance+opponent.radius &&
 		IsInRange(opponent.point, attackerDir, attackRange)
 }
 

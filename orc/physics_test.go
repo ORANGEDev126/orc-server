@@ -19,3 +19,27 @@ func TestDirectionToClockwise(t *testing.T) {
 		t.Error("case 4 fail")
 	}
 }
+
+func TestVectorToAngle(t *testing.T) {
+	if VectorToAngle(Point{1, 1}) != 45 {
+		t.Error("point (1, 1) fail")
+	}
+
+	if VectorToAngle(Point{0, 0}) != 0 {
+		t.Error("point (0, 0) fail")
+	}
+
+	if VectorToAngle(Point{0, 10}) != 90 {
+		t.Error("point (0, 10) fail")
+	}
+
+	result := VectorToAngle(Point{0, -10})
+
+	if result != 270 {
+		t.Error("point (0, -10) fail result : ", result)
+	}
+}
+
+func TestIsAttackSuccess(t *testing.T) {
+
+}

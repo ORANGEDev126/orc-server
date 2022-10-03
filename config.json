@@ -1,7 +1,7 @@
 {
     "FrameTickCount" : 100,
     "PhysicsTickCount" : 100,
-    "Accel" : 0.03,
+    "Accel" : 0.01,
     "MaxSpeed" : 0.4,
     "PlayerRadius" : 0.3,
     "ProjectileRadius" : 0.2,

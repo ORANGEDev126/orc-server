@@ -22,9 +22,9 @@ func (projectile *Projectile) Id() uint64 {
 	return projectile.id
 }
 
-func (projectile *Projectile) NextPos() Point {
+func (projectile *Projectile) NextPos(delta int64) Point {
 	return GetPosAngle(projectile.circle.point,
-		projectile.speed,
+		projectile.speed/GlobalConfig.PhysicsTickCount*float64(delta),
 		projectile.angle)
 }
 

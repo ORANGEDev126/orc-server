@@ -5,19 +5,22 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"time"
 
 	"google.golang.org/protobuf/proto"
 )
 
 type Player struct {
-	session     *Session
-	currDir     Direction
-	jogDir      Direction
-	circle      Circle
-	speed       float64
-	maxSpeed    float64
-	accel       float64
-	attackRange int
+	session        *Session
+	currDir        Direction
+	jogDir         Direction
+	circle         Circle
+	speed          float64
+	maxSpeed       float64
+	accel          float64
+	attackRange    int
+	attackDistance float64
+	defenceTime    time.Time
 }
 
 func (player Player) ToPlayerMessage() *PlayerMessage {
@@ -44,6 +47,10 @@ func (player *Player) GetId() uint64 {
 	return player.session.id
 }
 
+func (player *Player) IsDefencing() bool {
+	return int(time.Now().Sub(player.defenceTime).Milliseconds()) < GlobalConfig.DefenceDuration
+}
+
 func (player *Player) SendMessage(id Notification, msg proto.Message) {
 	packetLen := HEADER_LENGTH + proto.Size(msg)
 	buf := make([]byte, packetLen)
@@ -64,26 +71,24 @@ func (player *Player) ProjectileAttacked(projectileAngle int) {
 
 }
 
-func (player *Player) UpdateNextSpeed() float64 {
+func (player *Player) NextSpeed(deltaTime int64) float64 {
 	accel := player.accel
 	if player.jogDir == Direction_NONE_DIR {
 		accel = -accel
 	}
 
-	delta := accel * float64(GlobalConfig.FrameTickCount) / float64(GlobalConfig.PhysicsTickCount)
+	delta := accel / GlobalConfig.PhysicsTickCount * float64(deltaTime)
 	v := Clamp(0, player.maxSpeed, player.speed+delta)
-	player.speed = v
 
 	return v
 }
 
-func (player *Player) UpdateNextDirection() Direction {
+func (player *Player) NextDirection() Direction {
 	if player.jogDir == Direction_NONE_DIR {
 		return player.currDir
 	}
 
 	if player.currDir == Direction_NONE_DIR {
-		player.currDir = player.jogDir
 		return player.jogDir
 	}
 
@@ -104,13 +109,12 @@ func (player *Player) UpdateNextDirection() Direction {
 		dir = DirectionToAntiClockwise(player.currDir)
 	}
 
-	player.currDir = dir
 	return dir
 }
 
-func (player *Player) NextPoint(nextSpeed float64, nextDirection Direction) Point {
+func (player *Player) NextPoint(nextSpeed float64, nextDirection Direction, deltaTime int64) Point {
 	midSpeed := (player.speed + nextSpeed) / float64(2)
-	straightVal := midSpeed * float64(GlobalConfig.FrameTickCount) / float64(GlobalConfig.PhysicsTickCount)
+	straightVal := midSpeed * float64(deltaTime) / float64(GlobalConfig.PhysicsTickCount)
 	diagonalVal := straightVal * math.Sqrt2 / float64(2)
 
 	if nextDirection == Direction_NORTH {

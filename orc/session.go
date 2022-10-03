@@ -27,6 +27,7 @@ func init() {
 	handler[int(Request_MOVE_JOG_REQ)] = HandleMoveJogReq
 	handler[int(Request_SHOOT_PROJECTILE_REQ)] = HandleShootProjectileReq
 	handler[int(Request_ATTACK_REQ)] = HandleAttackReq
+	handler[int(Request_DEFENCE_REQ)] = HandleDefenceReq
 }
 
 func NewSession(conn net.Conn) *Session {

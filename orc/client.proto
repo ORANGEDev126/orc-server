@@ -7,6 +7,7 @@ enum Request {
     MOVE_JOG_REQ = 1;
     SHOOT_PROJECTILE_REQ = 2;
     ATTACK_REQ = 3;
+    DEFENCE_REQ = 4;
 }
 
 enum Notification {
@@ -19,6 +20,8 @@ enum Notification {
     PROJECTILE_ATTACK_NOTI = 6;
     ATTACK_PLAYER_NOTI = 7;
     PLAYER_ATTACKED_NOTI = 8;
+    PLAYER_DEFENCE_NOTI = 9;
+    PLAYER_ATTACK_DEFENCE_NOTI = 10;
 }
 
 enum Direction {
@@ -98,6 +101,22 @@ message AttackPlayerNotiMessage {
 }
 
 message PlayerAttackedNotiMessage {
+    int64 player_id = 1;
+    double x = 2;
+    double y = 3;
+}
+
+message DefenceReqMessage {
+
+}
+
+message PlayerDefenceNotiMessage{
+    int64 player_id = 1;
+    double x = 2;
+    double y = 3;
+}
+
+message PlayerAttackDefenceNotiMessage{
     int64 player_id = 1;
     double x = 2;
     double y = 3;

@@ -2,7 +2,6 @@ package orc
 
 import (
 	"fmt"
-
 	"google.golang.org/protobuf/proto"
 )
 
@@ -65,6 +64,25 @@ func HandleAttackReq(session *Session, buf []byte) {
 	}
 
 	playGround.attackChan <- AttackChan{
+		playerId: session.GetId(),
+	}
+}
+
+func HandleDefenceReq(session *Session, buf []byte) {
+	msg := &DefenceReqMessage{}
+	err := proto.Unmarshal(buf, msg)
+	if err != nil {
+		fmt.Println("unmarshal error on defence req", err)
+		return
+	}
+
+	playGround := session.playGround
+	if playGround == nil {
+		fmt.Println("play ground is nill on defence req")
+		return
+	}
+
+	playGround.defenceChan <- DefenceChan{
 		playerId: session.GetId(),
 	}
 }

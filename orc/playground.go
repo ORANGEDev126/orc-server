@@ -24,6 +24,10 @@ type AttackChan struct {
 	playerId uint64
 }
 
+type DefenceChan struct {
+	playerId uint64
+}
+
 type PlayGround struct {
 	players     map[uint64]*Player
 	projectiles []*Projectile
@@ -33,6 +37,8 @@ type PlayGround struct {
 	moveJog     chan MoveJogChan
 	shoot       chan ShootProjectileChan
 	attackChan  chan AttackChan
+	defenceChan chan DefenceChan
+	tick        time.Time
 }
 
 func StartGlobal() {
@@ -84,6 +90,7 @@ func UnregisterGlobal(session *Session) {
 
 func (ground *PlayGround) eventLoop() {
 	ticker := time.NewTicker(time.Millisecond * time.Duration(GlobalConfig.FrameTickCount))
+	ground.tick = time.Now()
 	defer ticker.Stop()
 
 	for {
@@ -103,15 +110,20 @@ func (ground *PlayGround) eventLoop() {
 			ground.shootProjectile(projectile.playerId, projectile.angle)
 		case attack := <-ground.attackChan:
 			ground.attack(attack.playerId)
+		case defence := <-ground.defenceChan:
+			ground.defence(defence.playerId)
 		}
 	}
 }
 
 func (ground *PlayGround) render() {
+	delta := time.Now().Sub(ground.tick).Milliseconds()
+	ground.tick = time.Now()
+
 	moveNoti := &MoveObjectNotiMessage{}
 
 	for i := 0; i < len(ground.projectiles); {
-		nextPoint := ground.projectiles[i].NextPos()
+		nextPoint := ground.projectiles[i].NextPos(delta)
 		projectileR := ground.projectiles[i].circle.radius
 		isCollision := false
 
@@ -140,13 +152,13 @@ func (ground *PlayGround) render() {
 	}
 
 	for id, player := range ground.players {
-		nextSpeed := player.UpdateNextSpeed()
+		nextSpeed := player.NextSpeed(delta)
 		if nextSpeed == 0 {
 			continue
 		}
 
-		nextDirection := player.UpdateNextDirection()
-		nextPoint := player.NextPoint(nextSpeed, nextDirection)
+		nextDirection := player.NextDirection()
+		nextPoint := player.NextPoint(nextSpeed, nextDirection, delta)
 		isCollision := false
 
 		for otherId, otherPlayer := range ground.players {
@@ -156,7 +168,6 @@ func (ground *PlayGround) render() {
 
 			if !IsCollision(player.circle, otherPlayer.circle) &&
 				IsCollision(Circle{nextPoint, player.circle.radius}, otherPlayer.circle) {
-				fmt.Println("collision true players")
 				isCollision = true
 				break
 			}
@@ -177,7 +188,6 @@ func (ground *PlayGround) render() {
 		}
 
 		player.Move(nextSpeed, nextDirection, nextPoint)
-		fmt.Printf("current speed : %f, current dir : %v, current jog dir : %v\n", player.speed, player.currDir, player.jogDir)
 		moveNoti.Objects = append(moveNoti.Objects, player.ToMoveObjectMessage())
 	}
 
@@ -274,7 +284,55 @@ func (ground *PlayGround) shootProjectile(id uint64, angle int) {
 }
 
 func (ground *PlayGround) attack(id uint64) {
+	attacker, ok := ground.players[id]
+	if !ok {
+		fmt.Println("Cannot find player on attack")
+		return
+	}
 
+	msg := &AttackPlayerNotiMessage{
+		PlayerId: int64(id),
+		Dir:      attacker.currDir,
+	}
+
+	ground.broadcast(Notification_ATTACK_PLAYER_NOTI, msg)
+
+	for i, player := range ground.players {
+		if i == id {
+			continue
+		}
+
+		if IsAttackSuccess(attacker.circle.point, player.circle, player.attackDistance,
+			attacker.currDir, attacker.attackRange) {
+
+			knockBackPoint := GetPosAngle(player.circle.point, GlobalConfig.KnockBackDistanceWhenAttacked,
+				VectorToAngle(player.circle.point.Minus(attacker.circle.point)))
+
+			msg := &PlayerAttackedNotiMessage{
+				PlayerId: int64(player.GetId()),
+				X:        knockBackPoint.x,
+				Y:        knockBackPoint.y,
+			}
+
+			ground.broadcast(Notification_PLAYER_ATTACKED_NOTI, msg)
+		}
+	}
+}
+
+func (ground *PlayGround) defence(playerId uint64) {
+	player, ok := ground.players[playerId]
+	if !ok {
+		fmt.Println("Cannot find player on defence req")
+		return
+	}
+
+	player.defenceTime = time.Now()
+
+	msg := &PlayerDefenceNotiMessage{
+		PlayerId: int64(player.GetId()),
+	}
+
+	ground.broadcast(Notification_PLAYER_DEFENCE_NOTI, msg)
 }
 
 func (ground *PlayGround) notifyProjectileEnter(projectile *Projectile) {

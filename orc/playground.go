@@ -308,6 +308,8 @@ func (ground *PlayGround) attack(id uint64) {
 			knockBackPoint := GetPosAngle(player.circle.point, GlobalConfig.KnockBackDistanceWhenAttacked,
 				VectorToAngle(player.circle.point.Minus(attacker.circle.point)))
 
+			player.Move(player.speed, player.currDir, knockBackPoint)
+
 			msg := &PlayerAttackedNotiMessage{
 				PlayerId: int64(player.GetId()),
 				X:        knockBackPoint.x,

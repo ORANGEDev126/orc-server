@@ -45,7 +45,7 @@ func IsCollision(circle, otherCircle Circle) bool {
 
 func IsAttackSuccess(attacker Point, opponent Circle, attackDistance float64, attackerDir Direction, attackRange int) bool {
 	return Distance(attacker, opponent.point) < attackDistance+opponent.radius &&
-		IsInRange(opponent.point, attackerDir, attackRange)
+		IsInRange(opponent.point, attacker, attackerDir, attackRange)
 }
 
 func GetPointFromDir(dir Direction) Point {
@@ -114,17 +114,13 @@ func GetAngleRangeFromDir(dir Direction, inputRange int) (int, int) {
 	return a, b
 }
 
-func IsInRange(opponentPoint Point, attackerDir Direction, attackRange int) bool {
-	a, b := GetAngleRangeFromDir(attackerDir, attackRange)
-	c := GetAngleFromPoint(opponentPoint)
+func IsInRange(opponentPoint Point, attackerPoint Point, attackerDir Direction, attackRange int) bool {
+	attackerVec := GetPointFromDir(attackerDir)
+	opponentVec := opponentPoint.Minus(attackerPoint)
 
-	if a < c && c < b {
-		return true
-	}
-
-	c += 360
-
-	if a < c && c < b {
+	attackerOpponentAngle := math.Acos((attackerVec.x*opponentVec.x + attackerVec.y*opponentVec.y) / (Distance(Point{0, 0}, attackerVec) * Distance(Point{0, 0}, opponentVec)))
+	attackerOpponentRadian := RadianToAngle(attackerOpponentAngle)
+	if attackerOpponentRadian < attackRange/2 {
 		return true
 	}
 

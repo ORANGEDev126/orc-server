@@ -33,13 +33,14 @@ func (player Player) ToPlayerMessage() *PlayerMessage {
 
 func NewPlayer(s *Session) *Player {
 	return &Player{
-		session:     s,
-		currDir:     Direction_NONE_DIR,
-		jogDir:      Direction_NONE_DIR,
-		circle:      Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
-		accel:       GlobalConfig.Accel,
-		maxSpeed:    GlobalConfig.MaxSpeed,
-		attackRange: GlobalConfig.PlayerAttackRange,
+		session:        s,
+		currDir:        Direction_NONE_DIR,
+		jogDir:         Direction_NONE_DIR,
+		circle:         Circle{Point{0, 0}, GlobalConfig.PlayerRadius},
+		accel:          GlobalConfig.Accel,
+		maxSpeed:       GlobalConfig.MaxSpeed,
+		attackRange:    GlobalConfig.PlayerAttackRange,
+		attackDistance: GlobalConfig.PlayerAttackDistance,
 	}
 }
 

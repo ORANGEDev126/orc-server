@@ -8,9 +8,9 @@
     "ProjectileSpeed" : 0.3,
     "ServerPort" : 8000,
     "PlayerAttackDistance": 0.5,
-    "PlayerAttackRange": 60,
+    "PlayerAttackRange": 90,
     "KnockBackDistanceWhenAttacked":  0.2,
     "KnockBackDistanceWhenDefence": 0.15,
     "DefenceDuration": 250,
-    "DefenceKnockBackDistance": 0.1,
+    "DefenceKnockBackDistance": 0.1
 }

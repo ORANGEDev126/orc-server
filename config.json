@@ -10,7 +10,7 @@
     "PlayerAttackDistance": 0.7,
     "PlayerAttackRange": 90,
     "KnockBackDistanceWhenAttacked":  0.2,
-    "KnockBackDistanceWhenDefence": 0.15,
-    "DefenceDuration": 250,
+    "KnockBackDistanceWhenDefence": 1.0,
+    "DefenceDuration": 500,
     "DefenceKnockBackDistance": 0.1
 }

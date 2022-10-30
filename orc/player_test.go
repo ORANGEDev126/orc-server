@@ -37,17 +37,17 @@ func TestNextSpeed(t *testing.T) {
 		maxSpeed: 10,
 	}
 
-	if next := mockPlayer.NextSpeed(int64(GlobalConfig.FrameTickCount)); next != 0.05 {
+	if next := mockPlayer.UpdateSpeed(int64(GlobalConfig.FrameTickCount)); next != 0.05 {
 		t.Error("case1 fail", next)
 	}
 
 	mockPlayer.jogDir = Direction_NONE_DIR
-	if next := mockPlayer.NextSpeed(int64(GlobalConfig.FrameTickCount)); next != 0 {
+	if next := mockPlayer.UpdateSpeed(int64(GlobalConfig.FrameTickCount)); next != 0 {
 		t.Error("case2 fail", next)
 	}
 
 	mockPlayer.speed = 0.1
-	if next := mockPlayer.NextSpeed(int64(GlobalConfig.FrameTickCount)); next != 0.05 {
+	if next := mockPlayer.UpdateSpeed(int64(GlobalConfig.FrameTickCount)); next != 0.05 {
 		t.Error("case3 fail", next)
 	}
 }

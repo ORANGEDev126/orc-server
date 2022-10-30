@@ -153,13 +153,16 @@ func (ground *PlayGround) render() {
 	}
 
 	for id, player := range ground.players {
-		nextSpeed := player.NextSpeed(delta)
-		if nextSpeed == 0 {
+		if player.IsStiffen() {
 			continue
 		}
 
-		nextDirection := player.NextDirection()
-		nextPoint := player.NextPoint(nextSpeed, nextDirection, delta)
+		nextDirection := player.UpdateDirection()
+
+		currSpeed := player.CurrSpeed()
+		nextSpeed := player.UpdateSpeed(delta)
+
+		nextPoint := player.NextPoint((currSpeed+nextSpeed)/2, nextDirection, delta)
 		isCollision := false
 
 		for otherId, otherPlayer := range ground.players {
@@ -174,10 +177,6 @@ func (ground *PlayGround) render() {
 			}
 		}
 
-		if isCollision {
-			continue
-		}
-
 		for i := 0; i < len(ground.projectiles); {
 			if IsCollision(Circle{nextPoint, player.circle.radius}, ground.projectiles[i].circle) {
 				player.ProjectileAttacked(ground.projectiles[i].angle)
@@ -188,7 +187,15 @@ func (ground *PlayGround) render() {
 			}
 		}
 
-		player.Move(nextSpeed, nextDirection, nextPoint)
+		if isCollision {
+			continue
+		}
+
+		if player.CurrPoint() == nextPoint {
+			continue
+		}
+
+		player.UpdatePoint(nextPoint)
 		moveNoti.Objects = append(moveNoti.Objects, player.ToMoveObjectMessage())
 	}
 
@@ -309,7 +316,8 @@ func (ground *PlayGround) attack(id uint64) {
 			knockBackPoint := GetPosAngle(player.circle.point, GlobalConfig.KnockBackDistanceWhenAttacked,
 				VectorToAngle(player.circle.point.Minus(attacker.circle.point)))
 
-			player.Move(player.speed, player.currDir, knockBackPoint)
+			player.UpdatePoint(knockBackPoint)
+			player.attackedTime = time.Now()
 
 			msg := &PlayerAttackedNotiMessage{
 				PlayerId: int64(player.GetId()),

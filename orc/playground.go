@@ -51,6 +51,7 @@ func StartGlobal() {
 		moveJog:     make(chan MoveJogChan),
 		shoot:       make(chan ShootProjectileChan),
 		attackChan:  make(chan AttackChan),
+		defenceChan: make(chan DefenceChan),
 	}
 
 	go globalPlayGround.eventLoop()
@@ -335,6 +336,7 @@ func (ground *PlayGround) defence(playerId uint64) {
 	}
 
 	ground.broadcast(Notification_PLAYER_DEFENCE_NOTI, msg)
+
 }
 
 func (ground *PlayGround) notifyProjectileEnter(projectile *Projectile) {

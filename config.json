@@ -13,5 +13,6 @@
     "KnockBackDistanceWhenDefence": 1.0,
     "DefenceDuration": 500,
     "DefenceKnockBackDistance": 0.1,
-    "BaseDamage": 10
+    "BaseDamage": 10,
+    "PlayerMaxHP": 100
 }

@@ -31,6 +31,7 @@ func (player Player) ToPlayerMessage() *PlayerMessage {
 		X:        player.circle.point.x,
 		Y:        player.circle.point.y,
 		RemainHp: int32(player.GetHP()),
+		MaxHp:    int32(GlobalConfig.PlayerMaxHP),
 	}
 }
 

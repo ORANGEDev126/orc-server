@@ -22,6 +22,7 @@ type Config struct {
 	DefenceDuration               int     `json:"DefenceDuration"`
 	DefenceKnockBackDistance      float64 `json:"DefenceKnockBackDistance"`
 	BaseDamage                    float64 `json:"BaseDamage"`
+	PlayerMaxHP                   int     `json:"PlayerMaxHP"`
 }
 
 var GlobalConfig Config

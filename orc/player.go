@@ -22,13 +22,15 @@ type Player struct {
 	attackDistance float64
 	defenceTime    time.Time
 	attackedTime   time.Time
+	hp             int
 }
 
 func (player Player) ToPlayerMessage() *PlayerMessage {
 	return &PlayerMessage{
-		Id: int64(player.GetId()),
-		X:  player.circle.point.x,
-		Y:  player.circle.point.y,
+		Id:       int64(player.GetId()),
+		X:        player.circle.point.x,
+		Y:        player.circle.point.y,
+		RemainHp: int32(player.GetHP()),
 	}
 }
 
@@ -42,6 +44,7 @@ func NewPlayer(s *Session) *Player {
 		maxSpeed:       GlobalConfig.MaxSpeed,
 		attackRange:    GlobalConfig.PlayerAttackRange,
 		attackDistance: GlobalConfig.PlayerAttackDistance,
+		hp:             300,
 	}
 }
 
@@ -97,6 +100,14 @@ func (player *Player) UpdateSpeed(deltaTime int64) float64 {
 	player.speed = v
 
 	return v
+}
+
+func (player *Player) UpdateHP(delta int) {
+	player.hp += delta
+}
+
+func (player *Player) GetHP() int {
+	return player.hp
 }
 
 func (player *Player) UpdateDirection() Direction {

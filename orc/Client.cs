@@ -24,47 +24,48 @@ namespace Orc {
     static ClientReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChBvcmMvY2xpZW50LnByb3RvEgNvcmMiTgoNUGxheWVyTWVzc2FnZRIKCgJp",
+            "ChBvcmMvY2xpZW50LnByb3RvEgNvcmMiYQoNUGxheWVyTWVzc2FnZRIKCgJp",
             "ZBgBIAEoAxIJCgF4GAIgASgBEgkKAXkYAyABKAESGwoDZGlyGAQgASgOMg4u",
-            "b3JjLkRpcmVjdGlvbiJEChFQcm9qZWN0aWxlTWVzc2FnZRIKCgJpZBgBIAEo",
-            "AxIJCgF4GAIgASgBEgkKAXkYAyABKAESDQoFYW5nbGUYBCABKAUiMAoRTW92",
-            "ZUpvZ1JlcU1lc3NhZ2USGwoDZGlyGAEgASgOMg4ub3JjLkRpcmVjdGlvbiI8",
-            "ChZFbnRlclBsYXllck5vdGlNZXNzYWdlEiIKBnBsYXllchgBIAEoCzISLm9y",
-            "Yy5QbGF5ZXJNZXNzYWdlIkgKGkVudGVyUHJvamVjdGlsZU5vdGlNZXNzYWdl",
-            "EioKCnByb2plY3RpbGUYASABKAsyFi5vcmMuUHJvamVjdGlsZU1lc3NhZ2Ui",
-            "TgoYV2VsY29tZVBsYXllck5vdGlNZXNzYWdlEg0KBW15X2lkGAEgASgDEiMK",
-            "B3BsYXllcnMYAiADKAsyEi5vcmMuUGxheWVyTWVzc2FnZSIkChZMZWF2ZU9i",
-            "amVjdE5vdGlNZXNzYWdlEgoKAmlkGAEgASgDIpQBChVNb3ZlT2JqZWN0Tm90",
-            "aU1lc3NhZ2USMgoHb2JqZWN0cxgBIAMoCzIhLm9yYy5Nb3ZlT2JqZWN0Tm90",
-            "aU1lc3NhZ2UuT2JqZWN0GkcKBk9iamVjdBIKCgJpZBgBIAEoAxIJCgF4GAIg",
-            "ASgBEgkKAXkYAyABKAESGwoDZGlyGAQgASgOMg4ub3JjLkRpcmVjdGlvbiJH",
-            "ChtQcm9qZWN0aWxlQXR0YWNrTm90aU1lc3NhZ2USEQoJcGxheWVyX2lkGAEg",
-            "ASgDEhUKDXByb2plY3RpbGVfaWQYAiABKAMiKgoZU2hvb3RQcm9qZWN0aWxl",
-            "UmVxTWVzc2FnZRINCgVhbmdsZRgBIAEoBSISChBBdHRhY2tSZXFNZXNzYWdl",
-            "IkkKF0F0dGFja1BsYXllck5vdGlNZXNzYWdlEhEKCXBsYXllcl9pZBgBIAEo",
-            "AxIbCgNkaXIYAiABKA4yDi5vcmMuRGlyZWN0aW9uIkQKGVBsYXllckF0dGFj",
-            "a2VkTm90aU1lc3NhZ2USEQoJcGxheWVyX2lkGAEgASgDEgkKAXgYAiABKAES",
-            "CQoBeRgDIAEoASITChFEZWZlbmNlUmVxTWVzc2FnZSJDChhQbGF5ZXJEZWZl",
-            "bmNlTm90aU1lc3NhZ2USEQoJcGxheWVyX2lkGAEgASgDEgkKAXgYAiABKAES",
-            "CQoBeRgDIAEoASJJCh5QbGF5ZXJBdHRhY2tEZWZlbmNlTm90aU1lc3NhZ2US",
-            "EQoJcGxheWVyX2lkGAEgASgDEgkKAXgYAiABKAESCQoBeRgDIAEoASpoCgdS",
-            "ZXF1ZXN0EhAKDE5PTkVfUkVRVUVTVBAAEhAKDE1PVkVfSk9HX1JFURABEhgK",
-            "FFNIT09UX1BST0pFQ1RJTEVfUkVREAISDgoKQVRUQUNLX1JFURADEg8KC0RF",
-            "RkVOQ0VfUkVREAQqnAIKDE5vdGlmaWNhdGlvbhINCglOT05FX05PVEkQABIV",
-            "ChFFTlRFUl9QTEFZRVJfTk9USRABEhcKE1dFTENPTUVfUExBWUVSX05PVEkQ",
-            "AhIVChFMRUFWRV9PQkpFQ1RfTk9USRADEhQKEE1PVkVfT0JKRUNUX05PVEkQ",
-            "BBIZChVFTlRFUl9QUk9KRUNUSUxFX05PVEkQBRIaChZQUk9KRUNUSUxFX0FU",
-            "VEFDS19OT1RJEAYSFgoSQVRUQUNLX1BMQVlFUl9OT1RJEAcSGAoUUExBWUVS",
-            "X0FUVEFDS0VEX05PVEkQCBIXChNQTEFZRVJfREVGRU5DRV9OT1RJEAkSHgoa",
-            "UExBWUVSX0FUVEFDS19ERUZFTkNFX05PVEkQCiqDAQoJRGlyZWN0aW9uEgwK",
-            "CE5PTkVfRElSEAASCQoFTk9SVEgQARIOCgpOT1JUSF9FQVNUEAISCAoERUFT",
-            "VBADEg4KCkVBU1RfU09VVEgQBBIJCgVTT1VUSBAFEg4KClNPVVRIX1dFU1QQ",
-            "BhIICgRXRVNUEAcSDgoKV0VTVF9OT1JUSBAIQgpaCC4vLi4vb3JjYgZwcm90",
-            "bzM="));
+            "b3JjLkRpcmVjdGlvbhIRCglyZW1haW5faHAYBSABKAUiRAoRUHJvamVjdGls",
+            "ZU1lc3NhZ2USCgoCaWQYASABKAMSCQoBeBgCIAEoARIJCgF5GAMgASgBEg0K",
+            "BWFuZ2xlGAQgASgFIjAKEU1vdmVKb2dSZXFNZXNzYWdlEhsKA2RpchgBIAEo",
+            "DjIOLm9yYy5EaXJlY3Rpb24iPAoWRW50ZXJQbGF5ZXJOb3RpTWVzc2FnZRIi",
+            "CgZwbGF5ZXIYASABKAsyEi5vcmMuUGxheWVyTWVzc2FnZSJIChpFbnRlclBy",
+            "b2plY3RpbGVOb3RpTWVzc2FnZRIqCgpwcm9qZWN0aWxlGAEgASgLMhYub3Jj",
+            "LlByb2plY3RpbGVNZXNzYWdlIk4KGFdlbGNvbWVQbGF5ZXJOb3RpTWVzc2Fn",
+            "ZRINCgVteV9pZBgBIAEoAxIjCgdwbGF5ZXJzGAIgAygLMhIub3JjLlBsYXll",
+            "ck1lc3NhZ2UiJAoWTGVhdmVPYmplY3ROb3RpTWVzc2FnZRIKCgJpZBgBIAEo",
+            "AyKUAQoVTW92ZU9iamVjdE5vdGlNZXNzYWdlEjIKB29iamVjdHMYASADKAsy",
+            "IS5vcmMuTW92ZU9iamVjdE5vdGlNZXNzYWdlLk9iamVjdBpHCgZPYmplY3QS",
+            "CgoCaWQYASABKAMSCQoBeBgCIAEoARIJCgF5GAMgASgBEhsKA2RpchgEIAEo",
+            "DjIOLm9yYy5EaXJlY3Rpb24iRwobUHJvamVjdGlsZUF0dGFja05vdGlNZXNz",
+            "YWdlEhEKCXBsYXllcl9pZBgBIAEoAxIVCg1wcm9qZWN0aWxlX2lkGAIgASgD",
+            "IioKGVNob290UHJvamVjdGlsZVJlcU1lc3NhZ2USDQoFYW5nbGUYASABKAUi",
+            "EgoQQXR0YWNrUmVxTWVzc2FnZSJJChdBdHRhY2tQbGF5ZXJOb3RpTWVzc2Fn",
+            "ZRIRCglwbGF5ZXJfaWQYASABKAMSGwoDZGlyGAIgASgOMg4ub3JjLkRpcmVj",
+            "dGlvbiJXChlQbGF5ZXJBdHRhY2tlZE5vdGlNZXNzYWdlEhEKCXBsYXllcl9p",
+            "ZBgBIAEoAxIJCgF4GAIgASgBEgkKAXkYAyABKAESEQoJcmVtYWluX2hwGAQg",
+            "ASgFIhMKEURlZmVuY2VSZXFNZXNzYWdlIkMKGFBsYXllckRlZmVuY2VOb3Rp",
+            "TWVzc2FnZRIRCglwbGF5ZXJfaWQYASABKAMSCQoBeBgCIAEoARIJCgF5GAMg",
+            "ASgBIlwKHlBsYXllckF0dGFja0RlZmVuY2VOb3RpTWVzc2FnZRIRCglwbGF5",
+            "ZXJfaWQYASABKAMSCQoBeBgCIAEoARIJCgF5GAMgASgBEhEKCXJlbWFpbl9o",
+            "cBgEIAEoBSpoCgdSZXF1ZXN0EhAKDE5PTkVfUkVRVUVTVBAAEhAKDE1PVkVf",
+            "Sk9HX1JFURABEhgKFFNIT09UX1BST0pFQ1RJTEVfUkVREAISDgoKQVRUQUNL",
+            "X1JFURADEg8KC0RFRkVOQ0VfUkVREAQqnAIKDE5vdGlmaWNhdGlvbhINCglO",
+            "T05FX05PVEkQABIVChFFTlRFUl9QTEFZRVJfTk9USRABEhcKE1dFTENPTUVf",
+            "UExBWUVSX05PVEkQAhIVChFMRUFWRV9PQkpFQ1RfTk9USRADEhQKEE1PVkVf",
+            "T0JKRUNUX05PVEkQBBIZChVFTlRFUl9QUk9KRUNUSUxFX05PVEkQBRIaChZQ",
+            "Uk9KRUNUSUxFX0FUVEFDS19OT1RJEAYSFgoSQVRUQUNLX1BMQVlFUl9OT1RJ",
+            "EAcSGAoUUExBWUVSX0FUVEFDS0VEX05PVEkQCBIXChNQTEFZRVJfREVGRU5D",
+            "RV9OT1RJEAkSHgoaUExBWUVSX0FUVEFDS19ERUZFTkNFX05PVEkQCiqDAQoJ",
+            "RGlyZWN0aW9uEgwKCE5PTkVfRElSEAASCQoFTk9SVEgQARIOCgpOT1JUSF9F",
+            "QVNUEAISCAoERUFTVBADEg4KCkVBU1RfU09VVEgQBBIJCgVTT1VUSBAFEg4K",
+            "ClNPVVRIX1dFU1QQBhIICgRXRVNUEAcSDgoKV0VTVF9OT1JUSBAIQgpaCC4v",
+            "Li4vb3JjYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Orc.Request), typeof(global::Orc.Notification), typeof(global::Orc.Direction), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerMessage), global::Orc.PlayerMessage.Parser, new[]{ "Id", "X", "Y", "Dir" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerMessage), global::Orc.PlayerMessage.Parser, new[]{ "Id", "X", "Y", "Dir", "RemainHp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.ProjectileMessage), global::Orc.ProjectileMessage.Parser, new[]{ "Id", "X", "Y", "Angle" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.MoveJogReqMessage), global::Orc.MoveJogReqMessage.Parser, new[]{ "Dir" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.EnterPlayerNotiMessage), global::Orc.EnterPlayerNotiMessage.Parser, new[]{ "Player" }, null, null, null, null),
@@ -76,10 +77,10 @@ namespace Orc {
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.ShootProjectileReqMessage), global::Orc.ShootProjectileReqMessage.Parser, new[]{ "Angle" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.AttackReqMessage), global::Orc.AttackReqMessage.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.AttackPlayerNotiMessage), global::Orc.AttackPlayerNotiMessage.Parser, new[]{ "PlayerId", "Dir" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerAttackedNotiMessage), global::Orc.PlayerAttackedNotiMessage.Parser, new[]{ "PlayerId", "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerAttackedNotiMessage), global::Orc.PlayerAttackedNotiMessage.Parser, new[]{ "PlayerId", "X", "Y", "RemainHp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.DefenceReqMessage), global::Orc.DefenceReqMessage.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerDefenceNotiMessage), global::Orc.PlayerDefenceNotiMessage.Parser, new[]{ "PlayerId", "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerAttackDefenceNotiMessage), global::Orc.PlayerAttackDefenceNotiMessage.Parser, new[]{ "PlayerId", "X", "Y" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Orc.PlayerAttackDefenceNotiMessage), global::Orc.PlayerAttackDefenceNotiMessage.Parser, new[]{ "PlayerId", "X", "Y", "RemainHp" }, null, null, null, null)
           }));
     }
     #endregion
@@ -161,6 +162,7 @@ namespace Orc {
       x_ = other.x_;
       y_ = other.y_;
       dir_ = other.dir_;
+      remainHp_ = other.remainHp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -218,6 +220,18 @@ namespace Orc {
       }
     }
 
+    /// <summary>Field number for the "remain_hp" field.</summary>
+    public const int RemainHpFieldNumber = 5;
+    private int remainHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainHp {
+      get { return remainHp_; }
+      set {
+        remainHp_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -237,6 +251,7 @@ namespace Orc {
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(X, other.X)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Y, other.Y)) return false;
       if (Dir != other.Dir) return false;
+      if (RemainHp != other.RemainHp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -248,6 +263,7 @@ namespace Orc {
       if (X != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(X);
       if (Y != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Y);
       if (Dir != global::Orc.Direction.NoneDir) hash ^= Dir.GetHashCode();
+      if (RemainHp != 0) hash ^= RemainHp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -282,6 +298,10 @@ namespace Orc {
         output.WriteRawTag(32);
         output.WriteEnum((int) Dir);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -308,6 +328,10 @@ namespace Orc {
         output.WriteRawTag(32);
         output.WriteEnum((int) Dir);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -329,6 +353,9 @@ namespace Orc {
       }
       if (Dir != global::Orc.Direction.NoneDir) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dir);
+      }
+      if (RemainHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainHp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -353,6 +380,9 @@ namespace Orc {
       }
       if (other.Dir != global::Orc.Direction.NoneDir) {
         Dir = other.Dir;
+      }
+      if (other.RemainHp != 0) {
+        RemainHp = other.RemainHp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -385,6 +415,10 @@ namespace Orc {
             Dir = (global::Orc.Direction) input.ReadEnum();
             break;
           }
+          case 40: {
+            RemainHp = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -414,6 +448,10 @@ namespace Orc {
           }
           case 32: {
             Dir = (global::Orc.Direction) input.ReadEnum();
+            break;
+          }
+          case 40: {
+            RemainHp = input.ReadInt32();
             break;
           }
         }
@@ -3028,6 +3066,7 @@ namespace Orc {
       playerId_ = other.playerId_;
       x_ = other.x_;
       y_ = other.y_;
+      remainHp_ = other.remainHp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3073,6 +3112,18 @@ namespace Orc {
       }
     }
 
+    /// <summary>Field number for the "remain_hp" field.</summary>
+    public const int RemainHpFieldNumber = 4;
+    private int remainHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainHp {
+      get { return remainHp_; }
+      set {
+        remainHp_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3091,6 +3142,7 @@ namespace Orc {
       if (PlayerId != other.PlayerId) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(X, other.X)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Y, other.Y)) return false;
+      if (RemainHp != other.RemainHp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3101,6 +3153,7 @@ namespace Orc {
       if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
       if (X != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(X);
       if (Y != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Y);
+      if (RemainHp != 0) hash ^= RemainHp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3131,6 +3184,10 @@ namespace Orc {
         output.WriteRawTag(25);
         output.WriteDouble(Y);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3153,6 +3210,10 @@ namespace Orc {
         output.WriteRawTag(25);
         output.WriteDouble(Y);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3171,6 +3232,9 @@ namespace Orc {
       }
       if (Y != 0D) {
         size += 1 + 8;
+      }
+      if (RemainHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainHp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3192,6 +3256,9 @@ namespace Orc {
       }
       if (other.Y != 0D) {
         Y = other.Y;
+      }
+      if (other.RemainHp != 0) {
+        RemainHp = other.RemainHp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3220,6 +3287,10 @@ namespace Orc {
             Y = input.ReadDouble();
             break;
           }
+          case 32: {
+            RemainHp = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -3245,6 +3316,10 @@ namespace Orc {
           }
           case 25: {
             Y = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            RemainHp = input.ReadInt32();
             break;
           }
         }
@@ -3706,6 +3781,7 @@ namespace Orc {
       playerId_ = other.playerId_;
       x_ = other.x_;
       y_ = other.y_;
+      remainHp_ = other.remainHp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3751,6 +3827,18 @@ namespace Orc {
       }
     }
 
+    /// <summary>Field number for the "remain_hp" field.</summary>
+    public const int RemainHpFieldNumber = 4;
+    private int remainHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainHp {
+      get { return remainHp_; }
+      set {
+        remainHp_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3769,6 +3857,7 @@ namespace Orc {
       if (PlayerId != other.PlayerId) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(X, other.X)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Y, other.Y)) return false;
+      if (RemainHp != other.RemainHp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3779,6 +3868,7 @@ namespace Orc {
       if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
       if (X != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(X);
       if (Y != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Y);
+      if (RemainHp != 0) hash ^= RemainHp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3809,6 +3899,10 @@ namespace Orc {
         output.WriteRawTag(25);
         output.WriteDouble(Y);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3831,6 +3925,10 @@ namespace Orc {
         output.WriteRawTag(25);
         output.WriteDouble(Y);
       }
+      if (RemainHp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(RemainHp);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3849,6 +3947,9 @@ namespace Orc {
       }
       if (Y != 0D) {
         size += 1 + 8;
+      }
+      if (RemainHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainHp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3870,6 +3971,9 @@ namespace Orc {
       }
       if (other.Y != 0D) {
         Y = other.Y;
+      }
+      if (other.RemainHp != 0) {
+        RemainHp = other.RemainHp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3898,6 +4002,10 @@ namespace Orc {
             Y = input.ReadDouble();
             break;
           }
+          case 32: {
+            RemainHp = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -3923,6 +4031,10 @@ namespace Orc {
           }
           case 25: {
             Y = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            RemainHp = input.ReadInt32();
             break;
           }
         }

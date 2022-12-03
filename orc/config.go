@@ -21,6 +21,7 @@ type Config struct {
 	KnockBackDistanceWhenDefence  float64 `json:"KnockBackDistanceWhenDefence""`
 	DefenceDuration               int     `json:"DefenceDuration"`
 	DefenceKnockBackDistance      float64 `json:"DefenceKnockBackDistance"`
+	BaseDamage                    float64 `json:"BaseDamage"`
 }
 
 var GlobalConfig Config

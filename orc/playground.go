@@ -313,16 +313,32 @@ func (ground *PlayGround) attack(id uint64) {
 		if IsAttackSuccess(attacker.circle.point, player.circle, player.attackDistance,
 			attacker.currDir, attacker.attackRange) {
 
+			if player.IsDefencing() {
+				player.UpdateHP(int(-GlobalConfig.BaseDamage / 10))
+
+				msg := &PlayerAttackDefenceNotiMessage{
+					PlayerId: int64(player.GetId()),
+					X:        player.circle.point.x,
+					Y:        player.circle.point.y,
+					RemainHp: int32(player.GetHP()),
+				}
+				ground.broadcast(Notification_PLAYER_ATTACK_DEFENCE_NOTI, msg)
+				continue
+			}
+
 			knockBackPoint := GetPosAngle(player.circle.point, GlobalConfig.KnockBackDistanceWhenAttacked,
 				VectorToAngle(player.circle.point.Minus(attacker.circle.point)))
 
 			player.UpdatePoint(knockBackPoint)
 			player.attackedTime = time.Now()
 
+			player.UpdateHP(int(-GlobalConfig.BaseDamage))
+
 			msg := &PlayerAttackedNotiMessage{
 				PlayerId: int64(player.GetId()),
 				X:        knockBackPoint.x,
 				Y:        knockBackPoint.y,
+				RemainHp: int32(player.GetHP()),
 			}
 
 			ground.broadcast(Notification_PLAYER_ATTACKED_NOTI, msg)

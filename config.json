@@ -12,5 +12,6 @@
     "KnockBackDistanceWhenAttacked":  0.2,
     "KnockBackDistanceWhenDefence": 1.0,
     "DefenceDuration": 500,
-    "DefenceKnockBackDistance": 0.1
+    "DefenceKnockBackDistance": 0.1,
+    "BaseDamage": 10
 }

@@ -45,7 +45,7 @@ func NewPlayer(s *Session) *Player {
 		maxSpeed:       GlobalConfig.MaxSpeed,
 		attackRange:    GlobalConfig.PlayerAttackRange,
 		attackDistance: GlobalConfig.PlayerAttackDistance,
-		hp:             300,
+		hp:             100,
 	}
 }
 

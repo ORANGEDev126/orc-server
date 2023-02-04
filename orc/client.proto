@@ -8,6 +8,7 @@ enum Request {
     SHOOT_PROJECTILE_REQ = 2;
     ATTACK_REQ = 3;
     DEFENCE_REQ = 4;
+    LOGIN_REQ = 5;
 }
 
 enum Notification {
@@ -22,6 +23,7 @@ enum Notification {
     PLAYER_ATTACKED_NOTI = 8;
     PLAYER_DEFENCE_NOTI = 9;
     PLAYER_ATTACK_DEFENCE_NOTI = 10;
+    LOGIN_NOTI = 11;
 }
 
 enum Direction {
@@ -124,6 +126,14 @@ message PlayerAttackDefenceNotiMessage{
     double x = 2;
     double y = 3;
     int32 remain_hp = 4;
+}
+
+message LoginReqMessage {
+    string code = 1;
+}
+
+message LoginNotiMessage {
+    string access_token = 1;
 }
 
 

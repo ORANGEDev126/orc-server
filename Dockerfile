@@ -18,6 +18,7 @@ COPY --from=build /static/*.* /static/*.*
 COPY --from=build /config.json /config.json
 
 EXPOSE 8000
+EXPOSE 80
 USER nonroot:nonroot
 
 ENTRYPOINT ["/orc-server"]
